@@ -104,7 +104,7 @@
 //     },
 //   };
 // })();
-
+// image.png
 // // usage
 // const catalog1 = productCatalog.getInstance();
 // catalog1.addProduct('Product A');
