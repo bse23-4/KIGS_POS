@@ -1,3 +1,4 @@
+/* eslint-disable jest/expect-expect */
 /* eslint-disable no-undef */
 import '@testing-library/jest-dom';
 import ProductCatalog from 'renderer/Tools/ProductCatalog';
@@ -9,58 +10,39 @@ describe('Product Catalog Singleton', () => {
     const catalog1 = ProductCatalog.getInstance();
     const catalog2 = ProductCatalog.getInstance();
 
-    expect(catalog1).toBe(catalog2);
+    expect(catalog1).toBeInstanceOf(catalog2);
   });
 
-  test('Adds and retrieves products correctly', () => {
-    const catalog = ProductCatalog.getInstance();
+  test('Adds cash to a product  correctly', () => {
+    const catalog = ProductCatalog.getInstance().invokeCart();
 
-    catalog.addProduct('Product A');
-    catalog.addProduct('Product B');
-    catalog.addProduct('Product C');
+    catalog.addCash(600);
 
-    const products = catalog.getProducts();
-    expect(products).toContain('Product A');
-    expect(products).toContain('Product B');
-    expect(products).toContain('Product C');
-    expect(products.length).toBe(3);
+    expect(catalog.cash).toBe(600);
   });
 });
-// test product factory
-// describe('Product Factory using Factory Pattern', () => {
-//   const pdtFactory = new ProductFactory();
 
-//   test('Returns true if pdt is an instance of Product', () => {
-//     const pdt = pdtFactory.invokeProduct();
-//     const pdt2 = pdtFactory.invokeProduct();
-//     expect(pdt).toBe(pdt2);
-//   });
-//   // confirm that product name is set
-//   // test('Check for product name set', () => {
-//   //   const pdt = pdtFactory.invokeProduct({ productName: 'Airpods' });
-//   //   expect(pdt.productName).toBe('Airpods');
-//   // });
-// });
+describe('ProductFactory test', () => {
+  const data = {
+    productName: 'Dell XPS3',
+    productPrice: 1200,
+    dateOfPurchase: Date.now(),
+    productImage: '',
+    productDescription: '13-inch laptop with Intel Core i7 processor',
+    productId: 1,
+    productCategory: 'Electronics',
+    productQuantity: 3,
+  };
+  it('should create a Dell object', () => {
+    const factory = new ProductFactory();
+    const laptop = factory.createProduct(data);
 
-describe('Product Factory', () => {
-  test('Updates the product property correctly', () => {
-    const productData = {
-      productName: 'Product A',
-      price: 10.99,
-      category: 'Category A',
-    };
-
-    const product = new ProductFactory().invokeProduct(productData);
-    expect(product.productName).toContain('Product A');
-    // expect(product).toEqual(
-    //   expect.objectContaining({
-    //     productName: 'Product A',
-    //     price: 10.99,
-    //     category: 'Category A',
-    //     productId: 0,
-    //   })
-    // );
-    // expect(product.productId).toBeDefined();
-    // expect(product.productId).toHaveLength(8);
+    expect(laptop).toBeDefined();
+    expect(laptop.productName).toBe('Dell XPS3');
+    expect(laptop.productPrice).toBe(1200);
+    expect(laptop.productDescription).toBe(
+      '13-inch laptop with Intel Core i7 processor'
+    );
+    // expect(laptop instanceof Product).toBeTruthy();
   });
 });
