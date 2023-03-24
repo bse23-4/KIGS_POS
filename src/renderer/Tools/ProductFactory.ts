@@ -55,9 +55,9 @@ class Clothing implements ProductInterface {
   productQuantity!: number;
 }
 class ProductFactory {
-  createProduct(params: ProductInterface): Product {
+  createProduct(params: ProductInterface): ProductInterface {
     switch (params.productCategory) {
-      case 'Clothing':
+      case 'cloth':
         return new Clothing();
       default:
         return new Product(params);
@@ -65,5 +65,7 @@ class ProductFactory {
   }
 }
 
+// const factory = new ProductFactory();
+// console.log(factory.createProduct(data).productName);
 //
 export default ProductFactory;

@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import Products from './Products';
 import ProductInterface from '../modules/modules';
+import ProductCatalog from 'renderer/Tools/ProductCatalog';
 
 export default function StoreMenu() {
-
-  const [pdts] = useState<Array<ProductInterface>>([]);
+ const cart = ProductCatalog.getInstance();
+  const [pdts] = useState<Array<ProductInterface>>(cart.getProducts());
   // function to check for vailable products
   function availablePdts() {
     return pdts.length === 0 ? (
@@ -37,7 +38,7 @@ export default function StoreMenu() {
   }
   // search results
   function noSearchResults() {
-    return pdts.filter((pdt) => pdt.name === 'search').length === 0 ? (
+    return pdts.filter((pdt) => pdt.productName === 'search').length === 0 ? (
       <div
         className="select-none bg-blue-gray-100 rounded-3xl flex flex-wrap content-center justify-center h-full opacity-25"
         // x-show="filteredProducts().length === 0 && keyword.length > 0"
@@ -94,13 +95,7 @@ export default function StoreMenu() {
         />
       </div>
       <div className="h-full overflow-hidden mt-4">
-        <div className="h-full overflow-y-auto px-2">
-          {
-
-          availablePdts()
-
-          }
-        </div>
+        <div className="h-full overflow-y-auto px-2">{availablePdts()}</div>
       </div>
     </div>
   );
