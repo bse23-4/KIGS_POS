@@ -39,7 +39,7 @@
             </div>
           </div>
           <!-- end of cart items -->
-            <!-- <cart-item v-for="item in cart" :key="item.id" :item="item" :remove="remove" :update="update"/> -->
+          
           <!-- payment info -->
           <div class="select-none h-auto w-full text-center pt-3 pb-4 px-4">
             <div class="flex mb-3 text-lg font-semibold text-blue-gray-700">
@@ -57,7 +57,7 @@
               <hr class="my-2">
               <div class="grid grid-cols-3 gap-2 mt-2">
                 <div v-for="(money,index) in moneys" :key="index">
-                  <button v-on:click="addCash(money)" class="bg-white rounded-lg shadow hover:shadow-lg focus:outline-none inline-block px-2 py-1 text-sm">+<span x-text="numberFormat(money)"></span></button>
+                  <button v-on:click="addCash(money)" class="bg-white rounded-lg shadow hover:shadow-lg focus:outline-none inline-block px-2 py-1 text-sm">+<span v-text="numberFormat(money)"></span></button>
                 </div>
               </div>
             </div>
@@ -143,6 +143,7 @@ export default {
     addCash(amount) {      
       this.cash = (this.cash || 0) + amount;
       this.updateChange();
+      new Audio("../sound/beep-29.mp3").play();
     },
     getItemsCount() {
       return this.cart.reduce((count, item) => count + item.qty, 0);

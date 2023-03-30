@@ -34,7 +34,7 @@
             </div>
             <div
               class="select-none bg-blue-gray-100 rounded-3xl flex flex-wrap content-center justify-center h-full opacity-25"
-              x-show="filteredProducts().length === 0 && keyword.length > 0"
+              v-show="filteredProducts().length === 0 && keyword.length > 0"
             >
               <div class="w-full text-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-24 w-24 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -48,7 +48,7 @@
               </div>
             </div>
             <!-- filtered products -->
-            <!-- <div v-show="filteredProducts().length" class="grid grid-cols-4 gap-4 pb-3">
+            <div v-show="filteredProducts().length" class="grid grid-cols-4 gap-4 pb-3">
               <div v-for="product in filteredProducts()" :key="product.id">
                 <div
                   role="button"
@@ -63,8 +63,11 @@
                   </div>
                 </div>
               </div>
-            </div> -->
+            </div>
             <!-- filtered data -->
+            <!-- model -->
+          
+            <!--  -->
           </div>
         </div>
       </div>
@@ -78,14 +81,8 @@
 
 
 <script type="ts">
+// import Data from '../data/sample.json.json'
 import CartItem from "@/components/CartItem.vue";
-// let keyword = "";
-// let products = fetch("https://fakestoreapi.com/products")
-//   .then((res) => res.json())
-//   .then((data) => {
-//     return data;
-//   });
-
 export default {
   name:"MainView",
   components:{
@@ -97,9 +94,21 @@ export default {
       products:[]
     }
   },
+  computed: {
+    
+    cartTotal() {
+      return this.$store.state.cartTotal;
+    },
+  },
+  methods: {
+      filteredProducts() {
+      const rg = this.keyword ? new RegExp(this.keyword, "gi") : null;
+      return this.products.filter((p) => !rg || p.name.match(rg));
+    },
+  },
   mounted(){
     let products = (async function(){
-  let response = await fetch("https://fakestoreapi.com/products");
+  let response = await fetch(`../data/sample.json`);
      return await response.json();
     })();
     console.log(products);

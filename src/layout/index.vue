@@ -3,7 +3,7 @@
         <div class="hide-print flex flex-row h-screen antialiased text-blue-gray-800">
             <!-- sidebar -->
             <div class="flex-grow flex">
-            <Sidebar />
+            <Sidebar @addItem="addProduct" />
             <!-- end of sidebar -->
             <slot/>
             <!--  -->
@@ -25,6 +25,12 @@ export default {
     name: "LayoutView",
     components: {
         Sidebar,RightSideBar
+    },
+    methods: {
+        addProduct() {
+            // this.$store.commit("addProduct", product);
+            alert("product added");
+        },
     },
 }
 </script>
