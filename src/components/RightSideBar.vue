@@ -1,10 +1,9 @@
 <template>
-    
       <!-- right sidebar -->
       <div class="w-5/12 flex flex-col bg-blue-gray-50 h-full bg-white pr-4 pl-2 py-4">
         <div class="bg-white rounded-3xl flex flex-col h-full shadow">
           <!-- empty cart -->
-          <div x-show="cart.length === 0" class="flex-1 w-full p-4 opacity-25 select-none flex flex-col flex-wrap content-center justify-center">
+          <div v-show="cart.length === 0" class="flex-1 w-full p-4 opacity-25 select-none flex flex-col flex-wrap content-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-16 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
@@ -14,18 +13,18 @@
           </div>
 
           <!-- cart items -->
-          <div x-show="cart.length > 0" class="flex-1 flex flex-col overflow-auto">
+          <div v-show="cart.length > 0" class="flex-1 flex flex-col overflow-auto">
             <div class="h-16 text-center flex justify-center">
               <div class="pl-8 text-left text-lg py-4 relative">
                 <!-- cart icon -->
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                 </svg>
-                <div x-show="getItemsCount() > 0" class="text-center absolute bg-cyan-500 text-white w-5 h-5 text-xs p-0 leading-5 rounded-full -right-2 top-3" x-text="getItemsCount()"></div>
+                <div v-show="getItemsCount() > 0" class="text-center absolute bg-cyan-500 text-white w-5 h-5 text-xs p-0 leading-5 rounded-full -right-2 top-3" x-text="getItemsCount()"></div>
               </div>
               <div class="flex-grow px-8 text-right text-lg py-4 relative">
                 <!-- trash button -->
-                <button x-on:click="clear()" class="text-blue-gray-300 hover:text-pink-500 focus:outline-none">
+                <button v-on:click="clear()" class="text-blue-gray-300 hover:text-pink-500 focus:outline-none">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
@@ -35,45 +34,45 @@
 
             <div class="flex-1 w-full px-4 overflow-auto">
              <!-- cart item -->
-              
+              <cart-item v-for="item in cart" :key="item.id" :item="item"/>
               <!-- end of cart item -->
             </div>
           </div>
           <!-- end of cart items -->
-            <cart-item v-for="item in cart" :key="item.id" :item="item" :remove="remove" :update="update"/>
+            <!-- <cart-item v-for="item in cart" :key="item.id" :item="item" :remove="remove" :update="update"/> -->
           <!-- payment info -->
           <div class="select-none h-auto w-full text-center pt-3 pb-4 px-4">
             <div class="flex mb-3 text-lg font-semibold text-blue-gray-700">
               <div>TOTAL</div>
-              <div class="text-right w-full" x-text="priceFormat(getTotalPrice())"></div>
+              <div class="text-right w-full" v-text="priceFormat(getTotalPrice())"></div>
             </div>
             <div class="mb-3 text-blue-gray-700 px-3 pt-2 pb-3 rounded-lg bg-blue-gray-50">
               <div class="flex text-lg font-semibold">
                 <div class="flex-grow text-left">CASH</div>
                 <div class="flex text-right">
                   <div class="mr-2">Rp</div>
-                  <input x-bind:value="numberFormat(cash)" x-on:keyup="updateCash($event.target.value)" type="text" class="w-28 text-right bg-white shadow rounded-lg focus:bg-white focus:shadow-lg px-2 focus:outline-none">
+                  <input v-bind:value="numberFormat(cash)" x-on:keyup="updateCash($event.target.value)" type="text" class="w-28 text-right bg-white shadow rounded-lg focus:bg-white focus:shadow-lg px-2 focus:outline-none">
                 </div>
               </div>
               <hr class="my-2">
               <div class="grid grid-cols-3 gap-2 mt-2">
-                <template x-for="money in moneys">
-                  <button x-on:click="addCash(money)" class="bg-white rounded-lg shadow hover:shadow-lg focus:outline-none inline-block px-2 py-1 text-sm">+<span x-text="numberFormat(money)"></span></button>
-                </template>
+                <div v-for="(money,index) in moneys" :key="index">
+                  <button v-on:click="addCash(money)" class="bg-white rounded-lg shadow hover:shadow-lg focus:outline-none inline-block px-2 py-1 text-sm">+<span x-text="numberFormat(money)"></span></button>
+                </div>
               </div>
             </div>
             <div
-              x-show="change > 0"
+              v-show="change > 0"
               class="flex mb-3 text-lg font-semibold bg-cyan-50 text-blue-gray-700 rounded-lg py-2 px-3"
             >
               <div class="text-cyan-800">CHANGE</div>
               <div
                 class="text-right flex-grow text-cyan-600"
-                x-text="priceFormat(change)">
+                v-text="priceFormat(change)">
               </div>
             </div>
             <div
-              x-show="change < 0"
+              v-show="change < 0"
               class="flex mb-3 text-lg font-semibold bg-pink-100 text-blue-gray-700 rounded-lg py-2 px-3"
             >
               <div
@@ -82,7 +81,7 @@
               </div>
             </div>
             <div
-              x-show="change == 0 && cart.length > 0"
+              v-show="change == 0 && cart.length > 0"
               class="flex justify-center mb-3 text-lg font-semibold bg-cyan-50 text-cyan-700 rounded-lg py-2 px-3"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -91,12 +90,12 @@
             </div>
             <button
               class="text-white rounded-2xl text-lg w-full py-3 focus:outline-none"
-              x-bind:class="{
+              v-bind:class="{
                 'bg-cyan-500 hover:bg-cyan-600': submitable(),
                 'bg-blue-gray-200': !submitable()
               }"
               :disabled="!submitable()"
-              x-on:click="submit()"
+              v-on:click="submit()"
             >
               SUBMIT
             </button>
@@ -109,7 +108,68 @@
 <script>
 import CartItem from './CartItem.vue'
 export default {
+    name:"RightSidebar",
   components: { CartItem },
+  data() {
+    return {
+        cart:[],
+        cash: 0,
+        change:0,
+        moneys: [2000, 5000, 10000, 20000, 50000, 100000],
+        isShowModalReceipt: false,
+        receiptNo: null,
+        receiptDate: null,
+    }
+  },
+  methods:{
+    submit(){},
+     getTotalPrice() {
+      return this.cart.reduce(
+        (total, item) => total + item.qty * item.price,
+        0
+      );
+    },
+       clear() {
+      this.cash = 0;
+      this.cart = [];
+      this.receiptNo = null;
+      this.receiptDate = null;
+      this.updateChange();
+    //   this.clearSound();
+    },
+     submitable() {
+      return this.change >= 0 && this.cart.length > 0;
+    },
+    addCash(amount) {      
+      this.cash = (this.cash || 0) + amount;
+      this.updateChange();
+    },
+    getItemsCount() {
+      return this.cart.reduce((count, item) => count + item.qty, 0);
+    },
+    dateFormat(date) {
+      const formatter = new Intl.DateTimeFormat('id', { dateStyle: 'short', timeStyle: 'short'});
+      return formatter.format(date);
+    },
+    updateChange() {
+      this.change = this.cash - this.getTotalPrice();
+    },
+    submit() {
+      const time = new Date();
+      this.isShowModalReceipt = true;
+      this.receiptNo = `TWPOS-KS-${Math.round(time.getTime() / 1000)}`;
+      this.receiptDate = this.dateFormat(time);
+    },
     
+     numberFormat(number) {
+      return (number || "")
+        .toString()
+        .replace(/^0|\./g, "")
+        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+    },
+    priceFormat(number) {
+      return number ? `UGX. ${this.numberFormat(number)}` : `UGX. 0`;
+    },
+  }
 }
 </script>

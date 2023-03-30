@@ -11,16 +11,24 @@ class ProductCatalog {
   private constructor() {
     this.products = [];
   }
-
+  
   public static getInstance(): ProductCatalog {
     if (!ProductCatalog.instance) {
       ProductCatalog.instance = new ProductCatalog();
     }
     return ProductCatalog.instance;
   }
-
+  // function to play sound when a product is added
+  private static playSound(source:string):void {
+    const sound = new Audio(source);
+    sound.play();
+    // sound.onended = () => delete(sound);
+  }
   public addProduct(productName: ProductInterface): void {
+
     this.products = [...this.products,productName];
+    // play sound
+    ProductCatalog.playSound("../sound/beep-29.mp3");
     // saving products on persistent storage.
     localStorage.setItem("products", JSON.stringify(this.products));
   }

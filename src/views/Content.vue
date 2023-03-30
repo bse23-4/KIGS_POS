@@ -1,6 +1,5 @@
 <template>
-    <!-- page content -->
-    <div class="flex-grow flex">
+   
       <!-- store menu -->
       <div class="flex flex-col bg-blue-gray-50 h-full w-full py-4">
         <div class="flex px-2 flex-row relative">
@@ -70,8 +69,8 @@
         </div>
       </div>
       <!-- end of store menu -->
-
-    </div>
+  <!-- right sidebar -->
+  
 
 </template>
 
@@ -90,7 +89,7 @@ import CartItem from "@/components/CartItem.vue";
 export default {
   name:"MainView",
   components:{
-    CartItem
+    CartItem,
   },
   data(){
     return{
@@ -101,8 +100,9 @@ export default {
   mounted(){
     let products = (async function(){
   let response = await fetch("https://fakestoreapi.com/products");
-     console.log(response.body);
-    })()
+     return await response.json();
+    })();
+    console.log(products);
     // this.products = products;
   },
 }

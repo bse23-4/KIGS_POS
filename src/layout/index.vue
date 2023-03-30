@@ -1,21 +1,30 @@
 <template>
     <div class="bg-blue-gray-50">
         <div class="hide-print flex flex-row h-screen antialiased text-blue-gray-800">
-           <!-- sidebar -->
-           <Sidebar />
-           <!-- end of sidebar -->
+            <!-- sidebar -->
+            <div class="flex-grow flex">
+            <Sidebar />
+            <!-- end of sidebar -->
             <slot/>
             <!--  -->
+            <!-- right side bar -->
+             <right-side-bar/>
+
+            <!--  -->
+            </div>
+            <!-- end of sidebar -->
         </div>
     </div>
 </template>
 
-<script type="text/javascript">
+<script type="ts">
 import Sidebar from "@/components/Sidebar.vue";
+import RightSideBar from "@/components/RightSideBar.vue";
+
 export default {
-    name:"LayoutView",
+    name: "LayoutView",
     components: {
-        Sidebar
+        Sidebar,RightSideBar
     },
 }
 </script>
