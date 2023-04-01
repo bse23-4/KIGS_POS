@@ -1,10 +1,8 @@
 /* eslint-disable jest/expect-expect */
-/* eslint-disable no-undef */
-import '@testing-library/jest-dom';
+
 import ProductCatalog from '../src/modules/ProductCatalog';
 import ProductFactory from '../src/modules/ProductFactory';
 
-// import { render } from '@testing-library/react';
 describe('ProductFactory test', () => {
   const data = {
     productName: 'Dell XPS3',
@@ -40,7 +38,7 @@ describe('Product Catalog Singleton', () => {
     expect(catalog1).toBe(catalog2);
   });
 
-  test('Adds products to the catalog correctly', () => {
+  it('Adds products to the catalog correctly', () => {
     const factory = new ProductFactory();
     const pdts = {
       productName: 'Dell XPS3',

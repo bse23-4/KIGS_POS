@@ -1,8 +1,8 @@
-import { shallowMount } from '@vue/test-utils'
-// import ProductCatalog from '../../src/modules/ProductCatalog';
-// import ProductFactory from '../../src/modules/ProductFactory';
+import '@testing-library/jest-dom';
+import ProductCatalog from '../../modules/ProductCatalog';
+import ProductFactory from '../../modules/ProductFactory';
 
-// import { render } from '@testing-library/react';
+
 describe('ProductFactory test', () => {
   const data = {
     productName: 'Dell XPS3',
@@ -14,11 +14,11 @@ describe('ProductFactory test', () => {
     productCategory: 'Electronics',
     productQuantity: 3,
   };
-  // const factory = new ProductFactory();
+  const factory = new ProductFactory();
   it('should create a Dell object', () => {
-    // const laptop = factory.createProduct(data);
+    const laptop = factory.createProduct(data);
 
-    // expect(laptop).toBeDefined();
+    expect(laptop).toBeDefined();
     // expect(laptop.productCategory).toBe('Electronics');
     // expect(laptop.productName).toBe('Dell XPS3');
     // expect(laptop.productPrice).toBe(1200);
@@ -75,5 +75,43 @@ describe('Product Catalog Singleton', () => {
     // expect(catalog.getProducts()).toEqual(
     //   expect.arrayContaining([computer, cloth])
     // );
+  });
+});
+// product decorator unit test
+
+describe("Product Decorator", () => {
+  it("should add gift wrapping to a product", () => {
+    const baseProduct = new BaseProduct("Product", 10);
+    const giftWrappedProduct = new GiftWrapDecorator(baseProduct);
+
+    expect(giftWrappedProduct.name).toBe("Product (Gift Wrapped)");
+    expect(giftWrappedProduct.price).toBe(15);
+  });
+
+  it("should add express shipping to a product", () => {
+    const baseProduct = new BaseProduct("Product", 10);
+    const expressShippingProduct = new ExpressShippingDecorator(baseProduct);
+
+    expect(expressShippingProduct.name).toBe("Product (Express Shipping)");
+    expect(expressShippingProduct.price).toBe(20);
+  });
+});
+
+
+describe("Cart", () => {
+  let cart: Cart;
+  let salesperson: import('../../modules/modules').Observer;
+
+  beforeEach(() => {
+    cart = new Cart();
+    salesperson = new Salesperson();
+    cart.addObserver(salesperson);
+  });
+
+  it("should notify observers when a product is added to the cart", () => {
+    const product = { name: "Product", price: 10 };
+    cart.addProduct(product);
+
+    expect(console.log).toHaveBeenCalledWith(`Salesperson notified of new product added to cart: ${product.name}`);
   });
 });

@@ -1,3 +1,7 @@
+export interface Observer {
+  notify: (productId: ProductInterface) => void;
+}
+
 // product interface
 export default interface ProductInterface {
   productName: string;
@@ -9,12 +13,13 @@ export default interface ProductInterface {
   productCategory: string;
   productQuantity: number;
 }
-export interface Observer {
-  update: (productId: number) => void;
+
+export interface CartServiceInterface {
+  registerObserver: (observer: Observer) => void;
+  notifyObservers: () => void;
 }
 
-export interface Subject {
-  registerObserver: (observer: Observer) => void;
-  removeObserver: (observer: Observer) => void;
-  notifyObservers: (productId: number) => void;
+export interface Product {
+  name: string;
+  price: number;
 }

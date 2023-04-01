@@ -1,36 +1,33 @@
-import type { Observer , Subject } from './modules';
- export class Cart implements Subject {
+import type ProductInterface from './modules';
+import type { Observer , CartServiceInterface } from './modules';
+ export class CartService implements CartServiceInterface {
     private observers: Observer[] = [];
-  
+    private cart: ProductInterface[] = [];
     public registerObserver(observer: Observer): void {
-      this.observers.push(observer);
+      this.observers =  [...this.observers,observer];
     }
-  
-    public removeObserver(observer: Observer): void {
-      const index = this.observers.indexOf(observer);
-      if (index !== -1) {
-        this.observers.splice(index, 1);
-      }
+
+    addObserver(observer: Observer) {
+      this.observers = [...this.observers, observer];
     }
-  
-    public notifyObservers(productId: number): void {
+   
+    notifyObservers() {
       for (const observer of this.observers) {
-        observer.update(productId);
+        observer.notify(this.cart[this.cart.length - 1]);
       }
     }
-  }
   
-  class Salesperson implements Observer {
-    public update(productId: number): void {
-      console.log(`Salesperson notified of product ${productId} added to cart.`);
+    addProduct(product: ProductInterface) {
+      this.cart = [...this.cart, product];
+      this.notifyObservers();
     }
   }
   
-  const cart = new Cart();
+ class Salesperson implements Observer {
+    public notify(product: ProductInterface) {
+      console.log(`Salesperson notified of new product added to cart: ${product.productName}`);
+      }
+    }
+  const service = new CartService();
+
   const salesperson = new Salesperson();
-  
-  cart.registerObserver(salesperson);
-  
-  // When a product is added to the cart
-  cart.notifyObservers(123);
-//   Received message. The Observer pattern

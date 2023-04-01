@@ -1,7 +1,8 @@
 <template>
-   
+   <div>
+
       <!-- store menu -->
-      <div class="flex flex-col bg-blue-gray-50 h-full w-full py-4">
+      <!-- <div class="flex flex-col bg-blue-gray-50 h-full w-full py-4"> -->
         <div class="flex px-2 flex-row relative">
           <div class="absolute left-5 top-3 px-2 py-2 rounded-full bg-cyan-500 text-white">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -48,18 +49,17 @@
               </div>
             </div>
             <!-- filtered products -->
-            <div v-show="filteredProducts().length" class="grid grid-cols-4 gap-4 pb-3">
-              <div v-for="product in filteredProducts()" :key="product.id">
+            <div v-show="filteredProducts().length > 0" class="grid grid-cols-4 gap-4 pb-3">
+              <div v-for="(product,index) in filteredProducts()" :key="index">
                 <div
                   role="button"
                   class="select-none cursor-pointer transition-shadow overflow-hidden rounded-2xl bg-white shadow hover:shadow-lg"
-                  :title="product.name"
-                  v-on:click="addToCart(product)"
+                  :title="product.productName" v-on:click="addToCart(product)"
                 >
-                  <img :src="product.image" :alt="product.name">
+                  <img src="@/assets/img/beef-burger.png" :alt="product.productName">
                   <div class="flex pb-3 px-3 text-sm -mt-3">
-                    <p class="flex-grow truncate mr-1" x-text="product.name"></p>
-                    <p class="nowrap font-semibold" x-text="priceFormat(product.price)"></p>
+                    <p class="flex-grow truncate mr-1" v-text="product.productName"/>
+                    <p class="nowrap font-semibold" v-text="priceFormat(product.productPrice)"></p>
                   </div>
                 </div>
               </div>
@@ -70,49 +70,72 @@
             <!--  -->
           </div>
         </div>
-      </div>
+      
       <!-- end of store menu -->
-  <!-- right sidebar -->
-  
+   </div>
 
 </template>
-
-
-
 
 <script type="ts">
 // import Data from '../data/sample.json.json'
 import CartItem from "@/components/CartItem.vue";
+import { mapGetters } from 'vuex';
+import * as beef from "@/assets/img/beef-burger.png";
+// import ProductInterface from '@/modules/modules';
 export default {
   name:"MainView",
   components:{
     CartItem,
   },
   data(){
+    
     return{
       keyword:"",
-      products:[]
+      image:beef
     }
   },
   computed: {
-    
-    cartTotal() {
-      return this.$store.state.cartTotal;
-    },
+     ...mapGetters(["pdts"]),
+    products(){
+      return this.pdts;
+    }
   },
   methods: {
+      addToCart(product) {
+        alert(product.productName)
+      // const index = this.findCartIndex(product);
+      // if (index === -1) {
+        // this.cart.push({
+        //   productId: product.id,
+        //   image: product.image,
+        //   name: product.name,
+        //   price: product.price,
+        //   option: product.option,
+        //   qty: 1,
+        // });
+      // } else {
+        // this.cart[index].qty += 1;
+      // }
+      // this.beep();
+      // this.updateChange();
+    },
+    numberFormat(number) {
+      return (number || "")
+        .toString()
+        .replace(/^0|\,/g, "")
+        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
+    },
+    priceFormat(number) {
+      return number ? `UGX. ${this.numberFormat(number)}` : `UGX. 0`;
+    },
       filteredProducts() {
       const rg = this.keyword ? new RegExp(this.keyword, "gi") : null;
-      return this.products.filter((p) => !rg || p.name.match(rg));
+      return this.products.filter((p) => !rg || p.productName.match(rg));
     },
   },
-  mounted(){
-    let products = (async function(){
-  let response = await fetch(`../data/sample.json`);
-     return await response.json();
-    })();
-    console.log(products);
-    // this.products = products;
+  created() {
+    console.log(this.products);
   },
+ 
 }
 </script>
