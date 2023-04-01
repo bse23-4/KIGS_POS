@@ -1,6 +1,11 @@
 {
-  "name": "kigs",
-  "version": "0.0.0",
+  "name": "kigs_pos",
+  "version": "1.0.0",
+  "description": "This template should help get you started developing with Vue 3 in Vite.",
+  "main": "jest.config.js",
+  "directories": {
+    "test": "tests"
+  },
   "scripts": {
     "build": "run-p type-check build-only",
     "test:unit": "vue-cli-service test:unit",
@@ -37,5 +42,16 @@
     "typescript": "~4.7.4",
     "vite": "^3.0.2",
     "vue-tsc": "^0.38.8"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bse23-4/KIGS_POS.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bse23-4/KIGS_POS/issues"
+  },
+  "homepage": "https://github.com/bse23-4/KIGS_POS#readme"
 }
+
