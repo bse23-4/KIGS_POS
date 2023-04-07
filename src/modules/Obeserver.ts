@@ -7,9 +7,9 @@ import type { Observer , CartServiceInterface } from './modules';
       this.observers =  [...this.observers,observer];
     }
 
-    addObserver(observer: Observer) {
-      this.observers = [...this.observers, observer];
-    }
+    // addObserver(observer: Observer) {
+    //   this.observers = [...this.observers, observer];
+    // }
    
     notifyObservers() {
       for (const observer of this.observers) {
