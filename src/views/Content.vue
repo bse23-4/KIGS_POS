@@ -29,10 +29,27 @@
                 <p class="text-xl">
                   YOU DON'T HAVE
                   <br/>
-                  ANY PRODUCTS TO SHOW
+                  ANY PRODUCTS TO SHOW {{products.length}}
                 </p>
               </div>
             </div>
+            <!-- available products -->
+             <!-- <div v-show="products.length > 0" class="grid grid-cols-4 gap-4 pb-3">
+              <div v-for="(product,index) in products" :key="index">
+                <div
+                  role="button"
+                  class="select-none cursor-pointer transition-shadow overflow-hidden rounded-2xl bg-white shadow hover:shadow-lg"
+                  :title="product.productName" v-on:click="addToCart(product)"
+                >
+                  <img src="@/assets/img/beef-burger.png" :alt="product.productName">
+                  <div class="flex pb-3 px-3 text-sm -mt-3">
+                    <p class="flex-grow truncate mr-1" v-text="product.productName"/>
+                    <p class="nowrap font-semibold" v-text="priceFormat(product.productPrice)"></p>
+                  </div>
+                </div>
+              </div> -->
+            <!-- </div> -->
+            <!-- end of available -->
             <div
               class="select-none bg-blue-gray-100 rounded-3xl flex flex-wrap content-center justify-center h-full opacity-25"
               v-show="filteredProducts().length === 0 && keyword.length > 0"
@@ -81,6 +98,7 @@
 import CartItem from "@/components/CartItem.vue";
 import { mapGetters } from 'vuex';
 import * as beef from "@/assets/img/beef-burger.png";
+import ProductCatalog from '@/modules/ProductCatalog';
 // import ProductInterface from '@/modules/modules';
 export default {
   name:"MainView",
@@ -95,12 +113,13 @@ export default {
     }
   },
   computed: {
-     ...mapGetters(["pdts"]),
+     ...mapGetters(["product"]),
     products(){
-      return this.pdts;
+      return this.product;
     }
   },
   methods: {
+    // ...mapGetters(["cart","products"]),
       addToCart(product) {
         alert(product.productName)
       // const index = this.findCartIndex(product);
@@ -134,7 +153,7 @@ export default {
     },
   },
   created() {
-    console.log(this.products);
+    // console.log(this.products);
   },
  
 }
