@@ -1,7 +1,7 @@
-# kigs
+# Kigs POS
 
-This template should help get you started developing with Vue 3 in Vite.
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/269b3075-abbc-47eb-b641-9d74f832322d/deploy-status)](https://app.netlify.com/sites/aquamarine-monstera-0a0cb7/deploys)
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
