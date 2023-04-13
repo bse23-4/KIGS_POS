@@ -1,5 +1,6 @@
 export interface Observer {
   notify: (productId: ProductInterface) => void;
+  update: (productId: string) => void;
 }
 
 // product interface
@@ -22,4 +23,8 @@ export interface CartServiceInterface {
 export interface Product {
   name: string;
   price: number;
+}
+
+export interface PaymentMethod {
+  pay(amount: number): void;
 }

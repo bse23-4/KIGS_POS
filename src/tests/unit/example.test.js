@@ -115,3 +115,42 @@ describe("Cart", () => {
     expect(console.log).toHaveBeenCalledWith(`Salesperson notified of new product added to cart: ${product.name}`);
   });
 });
+
+// testing the strategy pattern
+import { MTN, PaymentGateway, Airtel } from "./payment";
+
+describe("PaymentGateway", () => {
+  describe("payment with mobile money", () => {
+    test("should pay with MTN gateway", () => {
+      const strategy = new Airtel(0758743490, 2580);
+      const paymentGateway = new PaymentGateway(strategy);
+      const logSpy = jest.spyOn(console, "log");
+
+      paymentGateway.pay(100);
+
+      expect(logSpy).toHaveBeenCalledWith("Paying 100 with Airtel");
+    });
+
+    test("should pay with MTN strategy", () => {
+      const mtnGateway = new MTN(0778743490, 2580);
+      const paymentContext = new paymentGateway(mtnGateway);
+      const logSpy = jest.spyOn(console, "log");
+
+      paymentContext.pay(50);
+
+      expect(logSpy).toHaveBeenCalledWith("Paying 50 with MTN");
+    });
+
+  });
+
+  describe("Test Setting Gateway ", () => {
+    test("should set gateway", () => {
+      const mtn = new MTN(0778743490, 2580);
+      const paymentGateway = new PaymentMethod(creditCardStrategy);
+
+      const airtelGateway = new Airtel(0750482089, 2580);
+      paymentGateway.setGateway(airtelGateway);
+      expect((paymentGateway).method).toBe(airtelGateway);
+    });
+  });
+});
