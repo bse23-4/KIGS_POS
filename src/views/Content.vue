@@ -33,23 +33,7 @@
                 </p>
               </div>
             </div>
-            <!-- available products -->
-             <!-- <div v-show="products.length > 0" class="grid grid-cols-4 gap-4 pb-3">
-              <div v-for="(product,index) in products" :key="index">
-                <div
-                  role="button"
-                  class="select-none cursor-pointer transition-shadow overflow-hidden rounded-2xl bg-white shadow hover:shadow-lg"
-                  :title="product.productName" v-on:click="addToCart(product)"
-                >
-                  <img src="@/assets/img/beef-burger.png" :alt="product.productName">
-                  <div class="flex pb-3 px-3 text-sm -mt-3">
-                    <p class="flex-grow truncate mr-1" v-text="product.productName"/>
-                    <p class="nowrap font-semibold" v-text="priceFormat(product.productPrice)"></p>
-                  </div>
-                </div>
-              </div> -->
-            <!-- </div> -->
-            <!-- end of available -->
+           <!-- available products -->
             <div
               class="select-none bg-blue-gray-100 rounded-3xl flex flex-wrap content-center justify-center h-full opacity-25"
               v-show="filteredProducts().length === 0 && keyword.length > 0"
@@ -145,7 +129,7 @@ export default {
         .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     },
     priceFormat(number) {
-      return number ? `UGX. ${this.numberFormat(number)}` : `UGX. 0`;
+      return number ? `UGX ${this.numberFormat(number)}` : `UGX. 0`;
     },
       filteredProducts() {
       const rg = this.keyword ? new RegExp(this.keyword, "gi") : null;

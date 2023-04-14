@@ -4,39 +4,39 @@ import type { Observer , CartServiceInterface } from './modules';
  export class CartService implements CartServiceInterface {
     private observers: Observer[] = [];
     private cart: ProductInterface[] = [];
-
+// adding a new observer
     public registerObserver(observer: Observer): void {
-      this.observers =  [...this.observers,observer];
+      // this.observers =  [...this.observers,observer];
+      this.observers.push(observer);
     }
 
-    addObserver(observer: Observer) {
-      this.observers = [...this.observers, observer];
-    }
-   
+  //  notifying observer after updating the cart
     notifyObservers() {
       for (const observer of this.observers) {
         observer.notify(this.cart[this.cart.length - 1]);
          observer.update(this.cart[this.cart.length - 1].productName);
       }
     }
-  
-    addProduct(product: ProductInterface) {
+
+  // adding product to cart
+    addProductToCart(product: ProductInterface) {
       this.cart = [...this.cart, product];
       this.notifyObservers();
     }
   }
   
- class Salesperson implements Observer {
+ export class Salesperson implements Observer {
+
     public notify(product: ProductInterface) {
-      console.log(`Salesperson notified of new product added to cart: ${product.productName}`);
+        console.log(`Salesperson notified of new product added to cart: ${product.productName}`);
       }
+
     update(barcode: string): void {
       console.log(`Salesperson notified of new product added to cart: ${barcode}`);
-    
     }
   }
     // Define the BarcodeScanner class, which implements the Observer interface
-class BarcodeScanner implements Observer {
+export class BarcodeScanner implements Observer {
   constructor(private readonly cart: CartService) {}
   notify (productId: ProductInterface) {};
 
@@ -47,7 +47,7 @@ class BarcodeScanner implements Observer {
 
     if (product) {
       // Add the product to the cart
-      this.cart.addProduct(product);
+      this.cart.addProductToCart(product);
     } else {
       console.log(`Could not find product for barcode ${barcode}.`);
     }

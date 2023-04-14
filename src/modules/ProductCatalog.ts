@@ -33,9 +33,11 @@ class ProductCatalog {
     sound.play();
     // sound.onended = () => delete(sound);
   }
+
   public addProduct(product: ProductInterface): void {
-  //  let d = JSON.parse(`${localStorage.getItem("products")}`);
-    this.products = [...this.products,product];
+    // this.products = [...this.products,product];
+    this.products.push(product);
+    
     // play sound
     ProductCatalog.playSound("file:///Users/malticard/BSE23-4/KIGS_POS/src/sound/beep-29.mp3");
     // saving products on persistent storage.

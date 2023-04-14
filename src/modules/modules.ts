@@ -1,4 +1,4 @@
-export interface Observer {
+export interface  Observer {
   notify: (productId: ProductInterface) => void;
   update: (productId: string) => void;
 }

@@ -134,7 +134,7 @@
             class="bg-blue-500 hover:bg-blue-400 text-white outline-none w-full font-bold py-2 px-4 border-b-4 border-blue-400 hover:border-blue-500 rounded"
             v-text="`Save Details`"
           />
-        </div>
+        </div> 
       </form>
     </div>
   </div>
@@ -159,6 +159,10 @@ export default {
     ...mapMutations(["saveProduct"]),
     upload(e) {
       var f = e.currentTarget.files[0];
+      let reader = new FileReader();
+      reader.onload = function (e) {
+        console.log(e.target.result);
+      };
       console.log(f);
       this.image = URL.createObjectURL(f);
     },

@@ -35,10 +35,10 @@ import type { PaymentMethod } from "./modules";
   const airtel = new Airtel('0750482089' , '2580');
   const payment = new PaymentGateWay(airtel);
   
-  payment.pay(100); // outputs: Paying 100 with credit card 1234 5678 9012 3456
+  payment.pay(100); // outputs: Paying 100
   
   const mtn = new MTN('0778743490', '2580');
   payment.setGateway(mtn);
   
-  payment.pay(50); // outputs: Paying 50 with PayPal account johndoe@example.com
+  payment.pay(50); // outputs: Paying 50
   
