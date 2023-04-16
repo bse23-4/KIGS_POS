@@ -33,23 +33,7 @@
                 </p>
               </div>
             </div>
-            <!-- available products -->
-             <!-- <div v-show="products.length > 0" class="grid grid-cols-4 gap-4 pb-3">
-              <div v-for="(product,index) in products" :key="index">
-                <div
-                  role="button"
-                  class="select-none cursor-pointer transition-shadow overflow-hidden rounded-2xl bg-white shadow hover:shadow-lg"
-                  :title="product.productName" v-on:click="addToCart(product)"
-                >
-                  <img src="@/assets/img/beef-burger.png" :alt="product.productName">
-                  <div class="flex pb-3 px-3 text-sm -mt-3">
-                    <p class="flex-grow truncate mr-1" v-text="product.productName"/>
-                    <p class="nowrap font-semibold" v-text="priceFormat(product.productPrice)"></p>
-                  </div>
-                </div>
-              </div> -->
-            <!-- </div> -->
-            <!-- end of available -->
+
             <div
               class="select-none bg-blue-gray-100 rounded-3xl flex flex-wrap content-center justify-center h-full opacity-25"
               v-show="filteredProducts().length === 0 && keyword.length > 0"
@@ -71,19 +55,23 @@
                 <div
                   role="button"
                   class="select-none cursor-pointer transition-shadow overflow-hidden rounded-2xl bg-white shadow hover:shadow-lg"
-                  :title="product.productName" v-on:click="addToCart(product)"
+                  :title="product.productName"
                 >
-                  <img src="@/assets/img/beef-burger.png" :alt="product.productName">
+                  <img :src="product.productImage" :alt="product.productName">
                   <div class="flex pb-3 px-3 text-sm -mt-3">
-                    <p class="flex-grow truncate mr-1" v-text="product.productName"/>
-                    <p class="nowrap font-semibold" v-text="priceFormat(product.productPrice)"></p>
+                    <p class="flex-grow truncate text-lg mr-1" v-text="product.productName"/>
+                    <p class="nowrap font-semibold" v-text="priceFormat(product.productPrice)"/>
                   </div>
+                    <button class="w-3/6 h-3/6 bg-orange-300 p-5 font-semibold container" @click="addToCart(product)" v-text="`Add to cart`" />
+                    <button class="w-3/6 h-3/6 bg-teal-500 font-semibold p-5 container" @click="viewDetails()" v-text="`View Details`" />
+
                 </div>
               </div>
             </div>
             <!-- filtered data -->
             <!-- model -->
           
+          <Notification :class="[ showNot == true? 'active':'','pop']" :msg="message" @close="close()"/>
             <!--  -->
           </div>
         </div>
@@ -93,58 +81,51 @@
 
 </template>
 
-<script type="ts">
+<script lang="ts">
 // import Data from '../data/sample.json.json'
 import CartItem from "@/components/CartItem.vue";
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 import * as beef from "@/assets/img/beef-burger.png";
-import ProductCatalog from '@/modules/ProductCatalog';
-// import ProductInterface from '@/modules/modules';
+import type ProductInterface from '@/modules/modules';
+import Notification from '@/components/notification.vue';
 export default {
   name:"MainView",
   components:{
-    CartItem,
+    CartItem,Notification
   },
   data(){
-    
     return{
       keyword:"",
+      showNot:false,
       image:beef
     }
   },
   computed: {
-     ...mapGetters(["product"]),
-    products(){
-      return this.product;
+     ...mapGetters(["message"]),
+    products():ProductInterface[]{
+      return this.$store.getters.products;
     }
   },
   methods: {
-    // ...mapGetters(["cart","products"]),
-      addToCart(product) {
-        alert(product.productName)
-      // const index = this.findCartIndex(product);
-      // if (index === -1) {
-        // this.cart.push({
-        //   productId: product.id,
-        //   image: product.image,
-        //   name: product.name,
-        //   price: product.price,
-        //   option: product.option,
-        //   qty: 1,
-        // });
-      // } else {
-        // this.cart[index].qty += 1;
-      // }
-      // this.beep();
-      // this.updateChange();
-    },
-    numberFormat(number) {
+      ...mapMutations(["addingToCart"]),
+      addToCart(product:ProductInterface) {
+        this.showNot = true;
+        this.addingToCart(product)
+      },
+      close(){
+        this.showNot = false;
+
+      },
+      viewDetails(){
+        alert("Product details");
+      },
+    numberFormat(number:number) {
       return (number || "")
         .toString()
         .replace(/^0|\,/g, "")
         .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     },
-    priceFormat(number) {
+    priceFormat(number:number) {
       return number ? `UGX. ${this.numberFormat(number)}` : `UGX. 0`;
     },
       filteredProducts() {
@@ -152,9 +133,25 @@ export default {
       return this.products.filter((p) => !rg || p.productName.match(rg));
     },
   },
-  created() {
-    // console.log(this.products);
-  },
- 
+  
 }
 </script>
+
+<style lang="css">
+  .pop{
+    position: fixed !important;
+    width: 100%;
+    height: 100%;
+    top: 40px;
+    left:120px;
+    transition: 0.3s 0.1s cubic-bezier(0.6, -0.28, 0.735, 0.045);
+    visibility: hidden;
+    /* opacity: 0; */
+  }
+  .pop.active{
+    left:150px;
+    visibility:visible;
+    /* opacity: 1; */
+
+  }
+</style>

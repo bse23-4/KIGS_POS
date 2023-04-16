@@ -11,7 +11,6 @@
              </div>
             <!-- right side bar -->
              <right-side-bar/>
-
             <!--  -->
             </div>
             <!-- end of sidebar -->

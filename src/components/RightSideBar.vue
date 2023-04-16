@@ -24,7 +24,7 @@
               </div>
               <div class="flex-grow px-8 text-right text-lg py-4 relative">
                 <!-- trash button -->
-                <button v-on:click="clear()" class="text-blue-gray-300 hover:text-pink-500 focus:outline-none">
+                <button @click="clear()" class="text-blue-gray-300 hover:text-pink-500 focus:outline-none">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
@@ -50,14 +50,15 @@
               <div class="flex text-lg font-semibold">
                 <div class="flex-grow text-left">CASH</div>
                 <div class="flex text-right">
-                  <div class="mr-2">Rp</div>
-                  <input v-bind:value="numberFormat(cash)" x-on:keyup="updateCash($event.target.value)" type="text" class="w-28 text-right bg-white shadow rounded-lg focus:bg-white focus:shadow-lg px-2 focus:outline-none">
+                  <div class="mr-2">UGX</div>
+                  <!--v-model="`${numberFormat(cash)}`"*-->
+                  <input :value="`${numberFormat(cash)}`" @keyup="updateCash($event.target.value)" type="text" class="w-28 text-right bg-white shadow rounded-lg focus:bg-white focus:shadow-lg px-2 focus:outline-none"/>
                 </div>
               </div>
               <hr class="my-2">
               <div class="grid grid-cols-3 gap-2 mt-2">
                 <div v-for="(money,index) in moneys" :key="index">
-                  <button v-on:click="addCash(money)" class="bg-white rounded-lg shadow hover:shadow-lg focus:outline-none inline-block px-2 py-1 text-sm">+<span v-text="numberFormat(money)"></span></button>
+                  <button @click="addCash(money)" class="bg-white rounded-lg shadow hover:shadow-lg focus:outline-none inline-block px-2 py-1 text-sm">+<span v-text="numberFormat(money)"></span></button>
                 </div>
               </div>
             </div>
@@ -77,7 +78,7 @@
             >
               <div
                 class="text-right flex-grow text-pink-600"
-                x-text="priceFormat(change)">
+                v-text="priceFormat(change)">
               </div>
             </div>
             <div
@@ -91,11 +92,11 @@
             <button
               class="text-white rounded-2xl text-lg w-full py-3 focus:outline-none"
               v-bind:class="{
-                'bg-cyan-500 hover:bg-cyan-600': submitable(),
-                'bg-blue-gray-200': !submitable()
+                'bg-cyan-500 hover:bg-cyan-600': submittable(),
+                'bg-blue-gray-200': !submittable()
               }"
-              :disabled="!submitable()"
-              v-on:click="submit()"
+              :disabled="!submittable()"
+              @click="submit()"
             >
               SUBMIT
             </button>
@@ -104,52 +105,60 @@
         </div>
       </div>
       <!-- end of right sidebar -->
+      <!-- pop ups -->
 </template>
-<script>
+<script lang='ts'>
 import CartItem from './CartItem.vue'
+import type ProductInterface from "@/modules/modules";
+import { mapGetters } from 'vuex';
 export default {
     name:"RightSidebar",
   components: { CartItem },
   data() {
     return {
-        cart:[],
+
         cash: 0,
         change:0,
-        moneys: [2000, 5000, 10000, 20000, 50000, 100000],
+        // moneys: [2000, 5000, 10000, 20000, 50000, 100000],
         isShowModalReceipt: false,
-        receiptNo: null,
-        receiptDate: null,
+        receiptNo: '',
+        receiptDate: '',
     }
   },
+    computed:{
+      ...mapGetters(['moneys']),
+      cart():ProductInterface[]{
+          return this.$store.getters.cart;
+      }
+    },
   methods:{
-    submit(){},
      getTotalPrice() {
       return this.cart.reduce(
-        (total, item) => total + item.qty * item.price,
+        (total, item) => total + item.productQuantity * item.productPrice,
         0
       );
     },
        clear() {
       this.cash = 0;
-      this.cart = [];
-      this.receiptNo = null;
-      this.receiptDate = null;
+      this.$store.state.cart = [];
+      this.receiptNo = '';
+      this.receiptDate = '';
       this.updateChange();
     //   this.clearSound();
     },
-     submitable() {
+     submittable() {
       return this.change >= 0 && this.cart.length > 0;
     },
-    addCash(amount) {      
+    addCash(amount:number) {      
       this.cash = (this.cash || 0) + amount;
       this.updateChange();
-      new Audio("../sound/beep-29.mp3").play();
+      // new Audio("../sound/beep-29.mp3").play();
     },
     getItemsCount() {
-      return this.cart.reduce((count, item) => count + item.qty, 0);
+      return this.cart.reduce((count, item) => count + item.productQuantity, 0);
     },
-    dateFormat(date) {
-      const formatter = new Intl.DateTimeFormat('id', { dateStyle: 'short', timeStyle: 'short'});
+    dateFormat(date:number|Date|undefined) {
+      const formatter = new Intl.DateTimeFormat('id');
       return formatter.format(date);
     },
     updateChange() {
@@ -158,17 +167,17 @@ export default {
     submit() {
       const time = new Date();
       this.isShowModalReceipt = true;
-      this.receiptNo = `TWPOS-KS-${Math.round(time.getTime() / 1000)}`;
+      this.receiptNo = `TWPOS-KIGS-${Math.round(time.getTime() / 1000)}`;
       this.receiptDate = this.dateFormat(time);
     },
     
-     numberFormat(number) {
+     numberFormat(number:number) {
       return (number || "")
         .toString()
         .replace(/^0|\./g, "")
-        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+        .replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,");
     },
-    priceFormat(number) {
+    priceFormat(number:number) {
       return number ? `UGX. ${this.numberFormat(number)}` : `UGX. 0`;
     },
   }

@@ -1,5 +1,5 @@
 export interface Observer {
-  notify: (productId: ProductInterface) => void;
+  notify: (productId: ProductInterface) => void | string;
   update: (productId: string) => void;
 }
 

@@ -1,6 +1,6 @@
 <template>
   <div class="h-full overflow-hidden mt-4">
-    <div class="h-full overflow-y-auto sm:px-8 md:px-36 lg:px-96 py-36">
+    <div class="h-full overflow-y-auto sm:px-8 md:px-20 lg:px-80 py-20">
       <h3 class="px-8 py-8 text-2xl">Add a product</h3>
       <form class="w-full max-w-lg" @submit.prevent="save">
         <div class="flex flex-wrap -mx-3 mb-6">
@@ -159,8 +159,15 @@ export default {
     ...mapMutations(["saveProduct"]),
     upload(e) {
       var f = e.currentTarget.files[0];
-      console.log(f);
-      this.image = URL.createObjectURL(f);
+      let reader = new FileReader();
+      let that = this;
+      reader.onload = (e) => {
+        this.image = e.target.result;
+        // console.log(image);
+      }
+      reader.readAsDataURL(f);
+      // console.log(f);
+      // this.image = URL.createObjectURL(f);
     },
     save() {
       let data = {
