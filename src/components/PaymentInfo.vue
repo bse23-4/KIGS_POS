@@ -61,7 +61,7 @@
             </div>
             <hr class="my-2"/>
             <div class="flex text-xs font-semibold">
-              <p class="flex-grow" v-text="`CHANGE`"></p>
+              <p class="flex-grow" v-text="`BALANCE`"></p>
               <p v-text="priceFormat(change)"></p>
             </div>
              <!-- payment details -->

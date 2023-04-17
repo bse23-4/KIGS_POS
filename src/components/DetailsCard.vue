@@ -40,9 +40,20 @@
                        <br/>
                      <div class="flex flex-row justify-evenly p-3">
   <!-- edit  -->
-                     <button class="bg-cyan-500 text-white text-lg px-3 py-3 m-4 rounded-2xl w-96 focus:outline-none" @click="giftWrapping(details)" v-text="`GIFT WRAPPING`" ></button>
+                  <div>
+                       <p>
+              <span>Gift Wrapping: <b>UGX 800</b></span>
+            </p>
+            <button class="bg-cyan-500 text-white text-lg px-3 py-3 m-4 rounded-2xl w-96 focus:outline-none" @click="giftWrapping(details)" v-text="`GIFT WRAPPING`" ></button>
+
+                  </div>
+           
+             <div class="">
+                <span>Express Shipping:<b>UGX 1000</b> </span>
                      <button class="bg-cyan-500 text-white text-lg px-3 py-3 m-4 rounded-2xl w-96 focus:outline-none" @click="expressShipping(details)" v-text="`EXPRESS SHIPPING`"></button>
                      <!-- <button class="bg-cyan-500 text-white text-lg px-3 py-3 m-4 rounded-2xl w-96 focus:outline-none" v-text="`PROP`"></button> -->
+             </div>
+              
                      </div>
                      <br/>
                      <div class="flex flex-row justify-evenly p-3">
@@ -82,12 +93,13 @@ export default {
          };
          this.setDetails(expressShipping);
          
-       let update =  this.products.map((p:ProductInterface)=>{
-              if (p.productName == product.productImage) {
-                p.productPrice = ex.price;
-              }
-         })
-          console.log(update)
+       let update =  this.products.map((p:ProductInterface) => {
+          if (p.productName == product.productName) {
+              p.productPrice = ex.price
+          }
+          return p;
+     });
+           localStorage.setItem('products', JSON.stringify(update));
         },
         giftWrapping(pdt:ProductInterface){
          let gift = new GiftWrapDecorator(pdt);
@@ -98,6 +110,13 @@ export default {
          }
 
           this.setDetails(t);
+          let update =  this.products.map((p:ProductInterface) => {
+          if (p.productName == pdt.productName) {
+              p.productPrice = gift.price
+          }
+          return p;
+     });
+       localStorage.setItem('products', JSON.stringify(update));
         }
     },
 }
