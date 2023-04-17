@@ -10,6 +10,7 @@ export default new Vuex.Store({
   state:  {
       db: null,
       time: null,
+      showDetails:false,
       firstTime: localStorage.getItem("first_time") === null,
       activeMenu: 'pos',
       loadingSampleData: false,
@@ -21,20 +22,29 @@ export default new Vuex.Store({
       cash: 0,
       change: 0,
       isShowModalReceipt: false,
-      receiptNo: null,
+      receiptNo: '',
+      details:{} as ProductInterface,
+      gateway:{},
+      viewPayment:false,
       player: new Audio(),
-      receiptDate: null,
+      receiptDate: ''
   },
   getters: {
     products: state => state.products,
+    receiptNo: state => state.receiptNo,
+    receiptDate:state => state.receiptDate,
     keyword: state => state.keyword,
     cart: state => state.cart,
     cash: state => state.cash,
     moneys: state => state.moneys,
     change: state => state.change,
     player : state => state.player,
+    details: state => state.details,
     message:state => state.message,
     showModelReceipt: state => state.isShowModalReceipt,
+    showDetails:state => state.showDetails,
+    showPayment: state => state.viewPayment,
+    fetchGateway: state => state.gateway
   },
   mutations: {
     saveProduct(state,payload){
@@ -50,22 +60,48 @@ export default new Vuex.Store({
         state.cart = [...state.cart,payload];
         let service = new CartService();
         // sales person
-        let sales = new Salesperson();
-        state.message = sales.notify(payload);
+        let sales = new Salesperson(payload);
         // registering sales person to be notified of new products added to cart
         service.registerObserver(sales);
-        service.addProduct(payload);
+       state.message = service.addProduct(payload);
       } else{
         state.message = "Product is already added to cart"
       }
     },
+    setReceipt(state, payload:string){
+      state.receiptNo = payload;
+    },
+    setReceiptDate(state, payload:string){
+      state.receiptDate = payload;
+    },
+    // model for receipt
     setShowModel(state, payload:boolean) {
       state.isShowModalReceipt = payload;
+    },
+    setCash(state, payload){
+      state.cash = payload;
+    },
+    setChange(state, payload){
+      state.change = payload;
+    },
+    setDetails(state, payload){
+      state.details = payload;
+    },
+    setShowDetails(state, payload){
+      state.showDetails = payload;
+    },
+    setViewPayment(state, payload){
+      state.viewPayment = payload;
+    },
+    // setting payment gateway
+    setPaymentGateway(state, payload){
+        state.gateway = payload;
     }
-
   },
   actions: {
+    
   },
   modules: {
   }
 })
+

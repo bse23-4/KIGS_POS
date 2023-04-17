@@ -5,7 +5,7 @@
             <div class="flex-grow flex">
             <Sidebar @addItem="addProduct" />
             <!-- end of sidebar -->
-             <div class="flex flex-col bg-blue-gray-50 h-full w-full py-4">
+             <div class="flex flex-col bg-blue-gray-50 h-full w-full py-4 overflow-hidden">
             <slot/>
             <!--  -->
              </div>
@@ -15,6 +15,9 @@
             </div>
             <!-- end of sidebar -->
         </div>
+        <!-- modal -->
+
+        <!-- end of modal -->
     </div>
 </template>
 

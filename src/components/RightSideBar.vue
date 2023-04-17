@@ -81,24 +81,23 @@
                 v-text="priceFormat(change)">
               </div>
             </div>
-            <div
+            <!-- <div
               v-show="change == 0 && cart.length > 0"
               class="flex justify-center mb-3 text-lg font-semibold bg-cyan-50 text-cyan-700 rounded-lg py-2 px-3"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
               </svg>
-            </div>
+            </div> -->
             <button
               class="text-white rounded-2xl text-lg w-full py-3 focus:outline-none"
               v-bind:class="{
                 'bg-cyan-500 hover:bg-cyan-600': submittable(),
                 'bg-blue-gray-200': !submittable()
               }"
-              :disabled="!submittable()"
               @click="submit()"
             >
-              SUBMIT
+              PROCEED TO PAYMENT
             </button>
           </div>
           <!-- end of payment info -->
@@ -110,7 +109,7 @@
 <script lang='ts'>
 import CartItem from './CartItem.vue'
 import type ProductInterface from "@/modules/modules";
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 export default {
     name:"RightSidebar",
   components: { CartItem },
@@ -132,6 +131,7 @@ export default {
       }
     },
   methods:{
+    ...mapMutations(['setShowModel','setReceipt','setReceiptDate','setCash','setViewPayment']),
      getTotalPrice() {
       return this.cart.reduce(
         (total, item) => total + item.productQuantity * item.productPrice,
@@ -149,8 +149,9 @@ export default {
      submittable() {
       return this.change >= 0 && this.cart.length > 0;
     },
-    addCash(amount:number) {      
+    addCash(amount:number) {
       this.cash = (this.cash || 0) + amount;
+      this.setCash(this.cash);
       this.updateChange();
       // new Audio("../sound/beep-29.mp3").play();
     },
@@ -166,12 +167,12 @@ export default {
     },
     submit() {
       const time = new Date();
-      this.isShowModalReceipt = true;
-      this.receiptNo = `TWPOS-KIGS-${Math.round(time.getTime() / 1000)}`;
-      this.receiptDate = this.dateFormat(time);
+      this.setViewPayment(true);
+      this.setReceipt(`TWPOS-KIGGS-${Math.round(time.getTime() / 1000)}`);
+      this.setReceiptDate(this.dateFormat(time));
+      this.$store.commit('setChange',this.change);
     },
-    
-     numberFormat(number:number) {
+    numberFormat(number:number) {
       return (number || "")
         .toString()
         .replace(/^0|\./g, "")
@@ -180,6 +181,7 @@ export default {
     priceFormat(number:number) {
       return number ? `UGX. ${this.numberFormat(number)}` : `UGX. 0`;
     },
+  
   }
 }
 </script>

@@ -1,5 +1,4 @@
 import ProductCatalog from './ProductCatalog';
-import ProductFactory from './ProductFactory';
 import type ProductInterface from './modules';
 import type { Observer , CartServiceInterface } from './modules';
  export class CartService implements CartServiceInterface {
@@ -10,36 +9,44 @@ import type { Observer , CartServiceInterface } from './modules';
       this.observers =  [...this.observers,observer];
     }
    
-    notifyObservers() {
+    notifyObservers():string {
+      let msg = '';
       for (let index = 0; index < this.observers.length; index++) {
-        this.observers[index].notify(this.cart[index]);
-        //  observer.update(this.cart[this.cart.length - 1].productName);
+       msg = this.observers[index].notify(this.cart[index]);
       }
+      return msg;
     }
-    addProduct(product: ProductInterface) {
+    addProduct(product: ProductInterface):string {
       this.cart = [...this.cart, product];
-      // this.notifyObservers();
+
+     return this.notifyObservers();
     }
   }
  export class Salesperson implements Observer {
-    public notify(product: ProductInterface):string {
-      return(`${product.productName} has been added to cart.`);
+  private product:ProductInterface;
+  constructor(product:ProductInterface){
+    this.product = product;
+  }
+    public notify():string {
+      return(`${this.product.productName} has been added to cart.`);
       }
     update(barcode: string): void {}
   }
 
   // Define the BarcodeScanner class, which implements the Observer interface
-class BarcodeScanner implements Observer {
+export default class BarcodeScanner implements Observer {
   constructor(private readonly cart: CartService) {}
-    notify (productId: ProductInterface) {};
+    notify (productId: ProductInterface) {
+      return "";
+    };
   // Update method to handle barcode scan events
   update(barcode: string): void {
       let p = new ProductCatalog();
-      let product = p.getProducts().filter((product) => product.productName === barcode)[0];
+      let product = p.getProducts().find((product) => product.productName === barcode);
     // Look up the product from the barcode
-
     if (product) {
       // Add the product to the cart
+      this.cart.addProduct(product);
       // this.cart.addProduct(product);
     } else {
       console.log(`Could not find product for barcode ${barcode}.`);

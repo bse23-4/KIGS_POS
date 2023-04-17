@@ -1,5 +1,5 @@
 <template>
-   <div>
+   <div class="flex-1 w-full px-4 overflow-y-scroll">
 
       <!-- store menu -->
       <!-- <div class="flex flex-col bg-blue-gray-50 h-full w-full py-4"> -->
@@ -12,11 +12,11 @@
           <input
             type="text"
             class="bg-white rounded-3xl shadow text-lg full w-full h-16 py-4 pl-16 transition-shadow focus:shadow-2xl focus:outline-none"
-            placeholder="Cari menu ..."
+            placeholder="Cart menu ..."
             v-model="keyword"
           />
         </div>
-        <div class="h-full overflow-hidden mt-4">
+        <div class="h-full overflow-auto mt-4">
           <div class="h-full overflow-y-auto px-2">
             <div
               class="select-none bg-blue-gray-100 rounded-3xl flex flex-wrap content-center justify-center h-full opacity-25"
@@ -62,20 +62,23 @@
                     <p class="flex-grow truncate text-lg mr-1" v-text="product.productName"/>
                     <p class="nowrap font-semibold" v-text="priceFormat(product.productPrice)"/>
                   </div>
-                    <button class="w-3/6 h-3/6 bg-orange-300 p-5 font-semibold container" @click="addToCart(product)" v-text="`Add to cart`" />
-                    <button class="w-3/6 h-3/6 bg-teal-500 font-semibold p-5 container" @click="viewDetails()" v-text="`View Details`" />
+                    <button class="w-3/6 h-3/6 bg-orange-300 p-5 font-semibold cursor-pointer" @click="addToCart(product)" v-text="`Add to cart`" />
+                    <button class="w-3/6 h-3/6 bg-teal-500 font-semibold p-5 cursor-pointer" @click="viewDetails(product,index)" v-text="`View Details`" />
 
                 </div>
               </div>
             </div>
             <!-- filtered data -->
             <!-- model -->
-          
+          <PrintReceipt v-show="showModelReceipt"/>
           <Notification :class="[ showNot == true? 'active':'','pop']" :msg="message" @close="close()"/>
+          <details-card></details-card>
+          <payment></payment>
             <!--  -->
           </div>
         </div>
-      
+
+      <!-- <div class=""></div> -->
       <!-- end of store menu -->
    </div>
 
@@ -85,39 +88,51 @@
 // import Data from '../data/sample.json.json'
 import CartItem from "@/components/CartItem.vue";
 import { mapGetters, mapMutations } from 'vuex';
-import * as beef from "@/assets/img/beef-burger.png";
 import type ProductInterface from '@/modules/modules';
 import Notification from '@/components/notification.vue';
+import PrintReceipt from "@/components/PaymentInfo.vue";
+import DetailsCard from '@/components/DetailsCard.vue';
+import Payment from '@/components/Payment.vue';
+
 export default {
   name:"MainView",
   components:{
-    CartItem,Notification
+    CartItem,Notification,PrintReceipt,DetailsCard,Payment
   },
   data(){
     return{
       keyword:"",
       showNot:false,
-      image:beef
     }
   },
   computed: {
-     ...mapGetters(["message"]),
-    products():ProductInterface[]{
-      return this.$store.getters.products;
-    }
+     ...mapGetters(["message",'products','showModelReceipt']),
+  },
+  watch:{
+    ...mapGetters(["message",'products'])
   },
   methods: {
-      ...mapMutations(["addingToCart"]),
+      ...mapMutations(["addingToCart","setDetails","setShowDetails"]),
       addToCart(product:ProductInterface) {
         this.showNot = true;
-        this.addingToCart(product)
+        this.addingToCart(product);
+        // this.setDetails(product);
+       let c =  setTimeout(() => {
+          this.showNot = false
+        },1200);
+    //  clearInterval(c);
       },
       close(){
         this.showNot = false;
 
       },
-      viewDetails(){
-        alert("Product details");
+      viewDetails(product:ProductInterface,index:number){
+        let pdt = product;
+        this.setDetails({
+          ...pdt,
+          index:index
+        });
+        this.setShowDetails(true);
       },
     numberFormat(number:number) {
       return (number || "")
@@ -130,10 +145,10 @@ export default {
     },
       filteredProducts() {
       const rg = this.keyword ? new RegExp(this.keyword, "gi") : null;
-      return this.products.filter((p) => !rg || p.productName.match(rg));
+      return this.products.filter((p:ProductInterface) => !rg || p.productName.match(rg));
     },
   },
-  
+
 }
 </script>
 
@@ -152,6 +167,5 @@ export default {
     left:150px;
     visibility:visible;
     /* opacity: 1; */
-
   }
 </style>

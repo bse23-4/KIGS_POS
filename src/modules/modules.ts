@@ -1,5 +1,5 @@
 export interface Observer {
-  notify: (productId: ProductInterface) => void | string;
+  notify: (productId: ProductInterface) => string;
   update: (productId: string) => void;
 }
 
@@ -26,5 +26,5 @@ export interface Product {
 }
 
 export interface PaymentMethod {
-  pay(amount: number): void;
+  pay(amount:string): string;
 }
