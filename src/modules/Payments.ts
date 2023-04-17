@@ -6,11 +6,9 @@ import type { PaymentMethod } from "./modules";
       return (`Paying ${amount} with ${this.phone}.`);
     }
   }
-  
   class MTN implements PaymentMethod {
     
     constructor(private readonly phone:string, private readonly pin: string) {
-     
     }
   
     pay(amount: string): string {
@@ -37,13 +35,3 @@ import type { PaymentMethod } from "./modules";
       }
   }
 }
-  // Example usage
-  // const airtel = new Airtel('0750482089' , '2580');
-  // const payment = new PaymentGateWay(airtel);
-  
-  // payment.pay(100); // outputs: Paying 100 with credit card 1234 5678 9012 3456
-  
- 
-  
-  // payment.pay(50); // outputs: Paying 50 with PayPal account johndoe@example.com
-  

@@ -1,14 +1,8 @@
-/* eslint-disable class-methods-use-this */
-/* eslint-disable prettier/prettier */
 import type ProductInterface from "./modules";
-
-/* eslint-disable no-use-before-define */
 class ProductCatalog {
   private static instance: ProductCatalog;
-
    products: ProductInterface[];
   // static products: never[];
-
  constructor() {
   //  this.products = [];
    if (localStorage.getItem("products") == undefined || localStorage.getItem("products") == null) {
@@ -18,9 +12,7 @@ class ProductCatalog {
         this.products = JSON.parse(`${localStorage.getItem("products")}`);
       }
   }
-  
   public static getInstance(): ProductCatalog {
-  
     if (!ProductCatalog.instance) {
       ProductCatalog.instance = new ProductCatalog();
     }
@@ -34,23 +26,16 @@ class ProductCatalog {
     // sound.onended = () => delete(sound);
   }
   public addProduct(product: ProductInterface): void {
-  //  let d = JSON.parse(`${localStorage.getItem("products")}`);
     this.products = [...this.products,product];
     // play sound
     ProductCatalog.playSound("file:///Users/malticard/BSE23-4/KIGS_POS/src/sound/beep-29.mp3");
     // saving products on persistent storage.
     localStorage.setItem("products", JSON.stringify(this.products));
-   
-   
-    // localStorage.setItem("products", JSON.stringify(this.products));
     console.log(this.products);
-
   }
-
   public getProducts(): ProductInterface[] {
     // retrive saved products from localStorage
     return this.products;
   }
 }
-
 export default ProductCatalog;

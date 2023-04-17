@@ -1,7 +1,8 @@
 import '@testing-library/jest-dom';
 import ProductCatalog from '../../modules/ProductCatalog';
 import ProductFactory from '../../modules/ProductFactory';
-
+import  ProductInterface  from '../../modules/modules';
+import PaymentGateway from "../../modules/Payments";
 
 describe('ProductFactory test', () => {
   const data = {
@@ -19,13 +20,13 @@ describe('ProductFactory test', () => {
     const laptop = factory.createProduct(data);
 
     expect(laptop).toBeDefined();
-    // expect(laptop.productCategory).toBe('Electronics');
-    // expect(laptop.productName).toBe('Dell XPS3');
-    // expect(laptop.productPrice).toBe(1200);
-    // expect(laptop.productDescription).toBe(
-    //   '13-inch laptop with Intel Core i7 processor'
-    // );
-    // expect(laptop instanceof Product).toBeTruthy();
+    expect(laptop.productCategory).toBe('Electronics');
+    expect(laptop.productName).toBe('Dell XPS3');
+    expect(laptop.productPrice).toBe(1200);
+    expect(laptop.productDescription).toBe(
+      '13-inch laptop with Intel Core i7 processor'
+    );
+    expect(laptop instanceof Product).toBeTruthy();
   });
 });
 
@@ -33,48 +34,48 @@ describe('ProductFactory test', () => {
 
 describe('Product Catalog Singleton', () => {
   test('Creates only one instance of the product catalog', () => {
-    // const catalog1 = ProductCatalog.getInstance();
-    // const catalog2 = ProductCatalog.getInstance();
-    // expect(catalog1).toBe(catalog2);
+    const catalog1 = ProductCatalog.getInstance();
+    const catalog2 = ProductCatalog.getInstance();
+    expect(catalog1).toBe(catalog2);
   });
 
   test('Adds products to the catalog correctly', () => {
-    // const factory = new ProductFactory();
-    // const pdts = {
-    //   productName: 'Dell XPS3',
-    //   productPrice: 1200,
-    //   dateOfPurchase: Date.now(),
-    //   productImage: '',
-    //   productDescription: '13-inch laptop with Intel Core i7 processor',
-    //   productId: 1,
-    //   productCategory: 'Electronics',
-    //   productQuantity: 3,
-    // };
-    // // // create a computer
-    // const computer = factory.createProduct(pdts);
-    // const catalog = ProductCatalog.getInstance();
-    // // clothing data
-    // const c = {
-    //   productName: 'Dell XPS3',
-    //   productPrice: 120,
-    //   dateOfPurchase: Date.now(),
-    //   productImage: '',
-    //   productDescription: '13-inch laptop with Intel Core i7 processor',
-    //   productId: 1,
-    //   productCategory: 'Electronics',
-    //   productQuantity: 3,
-    // };
-    // // generate a clothig
-    // const cloth = factory.createProduct(c);
-    // // saving coth data
-    // catalog.addProduct(cloth);
-    // //
-    // catalog.addProduct(computer);
-    // // catalog.addProduct('Product B');
+    const factory = new ProductFactory();
+    const pdts = {
+      productName: 'Dell XPS3',
+      productPrice: 1200,
+      dateOfPurchase: Date.now(),
+      productImage: '',
+      productDescription: '13-inch laptop with Intel Core i7 processor',
+      productId: 1,
+      productCategory: 'Electronics',
+      productQuantity: 3,
+    };
+    // // create a computer
+    const computer = factory.createProduct(pdts);
+    const catalog = ProductCatalog.getInstance();
+    // clothing data
+    const c = {
+      productName: 'Dell XPS3',
+      productPrice: 120,
+      dateOfPurchase: Date.now(),
+      productImage: '',
+      productDescription: '13-inch laptop with Intel Core i7 processor',
+      productId: 1,
+      productCategory: 'Electronics',
+      productQuantity: 3,
+    };
+    // generate a clothig
+    const cloth = factory.createProduct(c);
+    // saving coth data
+    catalog.addProduct(cloth);
+    //
+    catalog.addProduct(computer);
+    // catalog.addProduct('Product B');
 
-    // expect(catalog.getProducts()).toEqual(
-    //   expect.arrayContaining([computer, cloth])
-    // );
+    expect(catalog.getProducts()).toEqual(
+      expect.arrayContaining([computer, cloth])
+    );
   });
 });
 // product decorator unit test
@@ -89,7 +90,7 @@ describe("Product Decorator", () => {
   });
 
   it("should add express shipping to a product", () => {
-    const baseProduct = new BaseProduct("Product", 10);
+   
     const expressShippingProduct = new ExpressShippingDecorator(baseProduct);
 
     expect(expressShippingProduct.name).toBe("Product (Express Shipping)");
@@ -99,8 +100,8 @@ describe("Product Decorator", () => {
 
 
 describe("Cart", () => {
-  let cart: Cart;
-  let salesperson: import('../../modules/modules').Observer;
+  let cart;
+  let salesperson;
 
   beforeEach(() => {
     cart = new Cart();
@@ -117,12 +118,11 @@ describe("Cart", () => {
 });
 
 // testing the strategy pattern
-import { MTN, PaymentGateway, Airtel } from "./payment";
 
 describe("PaymentGateway", () => {
   describe("payment with mobile money", () => {
     test("should pay with MTN gateway", () => {
-      const strategy = new Airtel(0758743490, 2580);
+      const strategy = new Airtel();
       const paymentGateway = new PaymentGateway(strategy);
       const logSpy = jest.spyOn(console, "log");
 
@@ -132,7 +132,7 @@ describe("PaymentGateway", () => {
     });
 
     test("should pay with MTN strategy", () => {
-      const mtnGateway = new MTN(0778743490, 2580);
+      const mtnGateway = new MTN();
       const paymentContext = new paymentGateway(mtnGateway);
       const logSpy = jest.spyOn(console, "log");
 
@@ -145,10 +145,10 @@ describe("PaymentGateway", () => {
 
   describe("Test Setting Gateway ", () => {
     test("should set gateway", () => {
-      const mtn = new MTN(0778743490, 2580);
-      const paymentGateway = new PaymentMethod(creditCardStrategy);
+     
+      const paymentGateway = new PaymentStrategy(creditCardStrategy);
 
-      const airtelGateway = new Airtel(0750482089, 2580);
+      const airtelGateway = new Airtel();
       paymentGateway.setGateway(airtelGateway);
       expect((paymentGateway).method).toBe(airtelGateway);
     });

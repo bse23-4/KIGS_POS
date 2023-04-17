@@ -1,15 +1,4 @@
 import type ProductInterface  from "./modules";
-class BaseProduct implements ProductInterface {
-  constructor(public name: string, public price: number) {}
-  productName!: string;
-  productPrice!: number;
-  dateOfPurchase: any;
-  productImage: any;
-  productDescription!: string;
-  productId!: number;
-  productCategory!: string;
-  productQuantity!: number;
-}
 
 class ProductDecorator implements ProductInterface {
   constructor(public product: ProductInterface) {}

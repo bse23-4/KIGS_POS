@@ -1,31 +1,16 @@
-/* eslint-disable max-classes-per-file */
-/* eslint-disable class-methods-use-this */
-/* eslint-disable new-cap */
-/* eslint-disable no-console */
-/* eslint-disable func-names */
-
 import type ProductInterface from './modules';
-
 /**
  * KIGGS SUPERMARKET POS SYSTEM
  */
 class Product implements ProductInterface {
   productName!: string;
-
   productPrice!: number;
-
   dateOfPurchase: any;
-
   productImage: any;
-
   productDescription!: string;
-
   productId!: number;
-
   productCategory!: string;
-
   productQuantity!: number;
-
   constructor(params: ProductInterface) {
     this.productName = params.productName;
     this.productPrice = params.productPrice;
@@ -39,19 +24,12 @@ class Product implements ProductInterface {
 }
 class Clothing implements ProductInterface {
   productName!: string;
-
   productPrice!: number;
-
   dateOfPurchase: any;
-
   productImage: any;
-
   productDescription!: string;
-
   productId!: number;
-
   productCategory!: string;
-
   productQuantity!: number;
 }
 class ProductFactory {
@@ -64,8 +42,4 @@ class ProductFactory {
     }
   }
 }
-
-// const factory = new ProductFactory();
-// console.log(factory.createProduct(data).productName);
-//
 export default ProductFactory;
