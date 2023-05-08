@@ -34,7 +34,7 @@
 
             <div class="flex-1 w-full px-4 overflow-auto">
              <!-- cart item -->
-              <cart-item v-for="item in cart" :key="item.id" :item="item"/>
+              <cart-item v-for="(item,index) in cart" :key="index" :id="index" :item="item"/>
               <!-- end of cart item -->
             </div>
           </div>
@@ -81,14 +81,14 @@
                 v-text="priceFormat(change)">
               </div>
             </div>
-            <!-- <div
+            <div
               v-show="change == 0 && cart.length > 0"
               class="flex justify-center mb-3 text-lg font-semibold bg-cyan-50 text-cyan-700 rounded-lg py-2 px-3"
             >
               <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
               </svg>
-            </div> -->
+            </div>
             <button
               class="text-white rounded-2xl text-lg w-full py-3 focus:outline-none"
               v-bind:class="{
@@ -131,10 +131,12 @@ export default {
       }
     },
   methods:{
-    ...mapMutations(['setShowModel','setReceipt','setReceiptDate','setCash','setViewPayment']),
+    ...mapMutations(['setShowModel','setReceipt','setReceiptDate','setTotalPrice','setCash','setViewPayment','captureReports']),
+    ...mapGetters([]),
      getTotalPrice() {
+        // let r = this.$store.getters.qty;
       return this.cart.reduce(
-        (total, item) => total + item.productQuantity * item.productPrice,
+        (total, item) => total + ( this.$store.getters.qty * item.productPrice),
         0
       );
     },
@@ -170,7 +172,9 @@ export default {
       this.setViewPayment(true);
       this.setReceipt(`TWPOS-KIGGS-${Math.round(time.getTime() / 1000)}`);
       this.setReceiptDate(this.dateFormat(time));
+      this.setTotalPrice(this.getTotalPrice());
       this.$store.commit('setChange',this.change);
+
     },
     numberFormat(number:number) {
       return (number || "")

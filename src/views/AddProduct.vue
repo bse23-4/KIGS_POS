@@ -1,10 +1,10 @@
 <template>
-  <div class="h-full overflow-hidden mt-4">
-    <div class="h-full overflow-y-auto sm:px-8 md:px-20 lg:px-80 py-20">
-      <h3 class="px-8 py-8 text-2xl">Add a product</h3>
-      <form class="w-full max-w-lg" @submit.prevent="save">
+  <div class="h-full overflow-hidden mt-9">
+    <div class="h-full overflow-y-auto  sm:px-8 md:px-20 lg:px-80 py-20">
+      <h3 class="px-5 py-5 text-2xl font-body">Add a product</h3>
+      <form class="w-full bg-slate-100 p-10 rounded-md" @submit.prevent="save">
         <div class="flex flex-wrap -mx-3 mb-6">
-          <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+          <div class="w-full md:w-2/3 px-3 mb-6 md:mb-0">
             <label
               class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               for="grid-first-name"
@@ -58,9 +58,9 @@
               for="grid-password"
               v-text="`Product Description`"
             />
-            <input
+            <textarea
               v-model="pdtDesc"
-              class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+              class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-6 px-5 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
               type="text"
             />
             <!-- <p class="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p> -->
@@ -89,13 +89,18 @@
               Product Category
             </label>
             <div class="relative">
-              <input
+              <!-- <input
                 v-model="pdtCat"
                 class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 id="grid-city"
                 type="text"
                 placeholder="Albuquerque"
-              />
+              /> -->
+              <select
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+               v-model="pdtCat">
+                <option v-for="(op,index) in options" :key="index" :value="op.value" v-text="op.label"></option>
+              </select>
 
               <div
                 class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700"
@@ -139,7 +144,7 @@
     </div>
   </div>
 </template>
-<script>
+<script lang="ts" >
 import { mapMutations } from "vuex";
 
 export default {
@@ -153,21 +158,38 @@ export default {
       pdtDesc: "",
       pdtCat: "",
       pdtQty: 0,
+      
     };
   },
+  computed:{
+    options(){
+      return [{
+        label: "Electronics",
+        value: "electronics",
+      },{
+        label: "Food",
+        value: "food",
+      },{
+        label: "Clothing",
+        value: "clothing",
+      },{
+        label: "Cutlery",
+        value: "cutlery",
+      }];
+    }
+  },
   methods: {
+  
     ...mapMutations(["saveProduct"]),
-    upload(e) {
+    upload(e:any) {
       var f = e.currentTarget.files[0];
       let reader = new FileReader();
-      let that = this;
+   
       reader.onload = (e) => {
-        this.image = e.target.result;
+        this.image = e.target?.result as string;
         // console.log(image);
       }
       reader.readAsDataURL(f);
-      // console.log(f);
-      // this.image = URL.createObjectURL(f);
     },
     save() {
       let data = {

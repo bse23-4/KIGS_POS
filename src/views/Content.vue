@@ -106,7 +106,7 @@ export default {
     }
   },
   computed: {
-     ...mapGetters(["message",'products','showModelReceipt']),
+     ...mapGetters(["message",'products','showModelReceipt','qty']),
   },
   watch:{
     ...mapGetters(["message",'products'])
@@ -114,8 +114,12 @@ export default {
   methods: {
       ...mapMutations(["addingToCart","setDetails","setShowDetails"]),
       addToCart(product:ProductInterface) {
+       
         this.showNot = true;
-        this.addingToCart(product);
+        this.addingToCart({
+          ...product,
+          productQuantity:this.qty
+        });
         // this.setDetails(product);
        let c =  setTimeout(() => {
           this.showNot = false

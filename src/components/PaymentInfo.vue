@@ -53,7 +53,7 @@
           <div>
             <div class="flex font-semibold">
               <div class="flex-grow">TOTAL</div>
-              <div v-text="priceFormat(getTotalPrice())"></div>
+              <div v-text="priceFormat(total)"></div>
             </div>
             <div class="flex text-xs font-semibold">
               <div class="flex-grow">PAY AMOUNT</div>
@@ -102,7 +102,7 @@ export default {
         }
     },
     computed:{
-        ...mapGetters(['products','receiptDate','receiptNo','cash','change','showModelReceipt','fetchGateway']),
+        ...mapGetters(['products','receiptDate','total','receiptNo','cash','change','showModelReceipt','fetchGateway']),
         cart():ProductInterface[] {
             return this.$store.getters.cart;
         }
@@ -113,13 +113,13 @@ export default {
        let titleBefore = document.title;
       let printArea = this.$refs.print;
         this.close = !this.close;
-      printArea = p.innerHTML;
+      printArea = p?.innerHTML;
       document.title = this.$store.getters.receiptNo;
       document.title = titleBefore;
       window.document
-         let printWindow = window.open('', '', 'height=1000,width=1000');
-          printWindow.document.writeln(printArea);
-          printWindow.print();
+         let printWindow = window.open('', '', 'height=500,width=500');
+          printWindow?.document.writeln(printArea);
+          printWindow?.print();
 
     },
     closeModalReceipt(){
@@ -134,12 +134,12 @@ export default {
     priceFormat(number:number) {
       return number ? `UGX. ${this.numberFormat(number)}` : `UGX. 0`;
     },
-   getTotalPrice() {
-      return this.cart.reduce(
-        (total, item) => total + item.productQuantity * item.productPrice,
-        0
-      );
-    }
+  //  getTotalPrice() {
+  //     return this.cart.reduce(
+  //       (total, item) => total + item.productQuantity * item.productPrice,
+  //       0
+  //     );
+  //   }
 }
 }
 </script>

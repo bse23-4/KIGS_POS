@@ -19,7 +19,7 @@
                         </label>
                         <div class="m-3" v-show="payment == 'MTN'">
                             <span class="font-bold">Phone:</span>
-                            <input type="text" v-model="phone" class="border p-2 w-80 border-cyan-700 rounded-md"/>
+                            <input type="phone" maxlength="10" v-model="phone" class="border p-2 w-80 border-cyan-700 rounded-md"/>
                             <div class="my-3">
                                 <button class=" bg-green-600 text-white text-center w-80 px-2 py-2 mx-2 my-2 rounded-md cursor-pointer" @click="makePayment()">Make Payment</button>
                             </div>
@@ -31,7 +31,7 @@
                         </label>
                         <div class="m-3" v-show="payment == 'Airtel'">
                             <span class="font-bold">Phone:</span>
-                            <input type="text" v-model="phone" class="border p-2 w-80 border-cyan-700 rounded-md"/>
+                            <input type="phone" maxlength="10" v-model="phone" class="border p-2 w-80 border-cyan-700 rounded-md"/>
                             <div class="my-3">
                                 <button class=" bg-green-600 text-white text-center w-80 px-2 py-2 mx-2 my-2 rounded-md cursor-pointer" @click="makePayment()">Make Payment</button>
                             </div>
@@ -57,10 +57,11 @@ export default {
         }
     },
     computed:{
-        ...mapGetters(['showPayment','details','cash','change'])
+        ...mapGetters(['showPayment','details','cash','change','cart'])
     },
     methods:{
-        ...mapMutations(['setViewPayment','setShowModel','setPaymentGateway']),
+    //   this.(this.cart)
+        ...mapMutations(['setViewPayment','setShowModel','setPaymentGateway','captureReports']),
         makePayment(){
          let gateway =  new PaymentGateWay(this.cash, this.phone);
         let payment = gateway.setGateway(this.payment);
@@ -72,7 +73,8 @@ export default {
          this.setPaymentGateway(data)
             this.setViewPayment(false);
            this.setShowModel(true);
-
+        this.captureReports(this.cart);
+        // [].splice(,1)
         }
     }
 

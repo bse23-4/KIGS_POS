@@ -14,19 +14,22 @@ export default new Vuex.Store({
       firstTime: localStorage.getItem("first_time") === null,
       activeMenu: 'pos',
       loadingSampleData: false,
-      moneys: [500,1000,2000, 3000, 5000, 10000, 20000, 50000, 100000],
-      products: pdtCat.getProducts(),
+      moneys: [500,1000,2000, 5000, 10000, 20000, 50000,100000],
+      products: [...pdtCat.getProducts()] as ProductInterface[],
       keyword: "",
       message:'',
       cart: [] as ProductInterface[],
       cash: 0,
       change: 0,
+      total:0,
       isShowModalReceipt: false,
       receiptNo: '',
       details:{} as ProductInterface,
       gateway:{},
+      qty:1,
       viewPayment:false,
       player: new Audio(),
+      reports:[...pdtCat.getReports()] as ProductInterface[],
       receiptDate: ''
   },
   getters: {
@@ -44,18 +47,24 @@ export default new Vuex.Store({
     showModelReceipt: state => state.isShowModalReceipt,
     showDetails:state => state.showDetails,
     showPayment: state => state.viewPayment,
-    fetchGateway: state => state.gateway
+    fetchGateway: state => state.gateway,
+    qty:state => state.qty,
+    reports:state => state.reports,
+    total:state => state.total,
   },
   mutations: {
-    saveProduct(state,payload){
+    saveProduct(state,payload:ProductInterface){
       let product = new ProductFactory();
      let pdt = product.createProduct(payload);
      //  console.log(payload)
       pdtCat.addProduct(pdt);
+      state.products = pdtCat.getProducts();
+      [].flatMap()
     },
     addingToCart(state, payload:ProductInterface){
       let old = state.cart.filter(c => c.productName === payload.productName);
       if(old.length === 0){
+        console.log(`Added => ${payload}`);
         // adding new product to cart
         state.cart = [...state.cart,payload];
         let service = new CartService();
@@ -67,6 +76,9 @@ export default new Vuex.Store({
       } else{
         state.message = "Product is already added to cart"
       }
+    },
+    setQty(state,payload:number){
+      state.qty = payload;
     },
     setReceipt(state, payload:string){
       state.receiptNo = payload;
@@ -96,7 +108,14 @@ export default new Vuex.Store({
     // setting payment gateway
     setPaymentGateway(state, payload){
         state.gateway = payload;
-    }
+    },
+    captureReports(state, payload){
+      pdtCat.saveReports(payload);
+      state.reports = pdtCat.getReports();
+    },
+    setTotalPrice(state, payload:number){
+      state.total = payload;
+    },
   },
   actions: {
     
