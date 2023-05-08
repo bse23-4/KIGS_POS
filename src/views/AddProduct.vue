@@ -1,10 +1,10 @@
 <template>
-  <div class="h-full overflow-hidden mt-9">
-    <div class="h-full overflow-y-auto  sm:px-8 md:px-20 lg:px-80 py-20">
-      <h3 class="px-5 py-5 text-2xl font-body">Add a product</h3>
-      <form class="w-full bg-slate-100 p-10 rounded-md" @submit.prevent="save">
+<div class="h-full overflow-hidden mt-4">
+    <div class="h-full overflow-y-auto sm:px-8 md:px-20 lg:px-12 lg:py-20">
+      <h3 class="px-8 py-8 text-2xl text-slate-800 font-body font-semibold">Add a product</h3>
+      <form class="w-full lg:px-7 md:px-4 md:py-4 lg:py-7 rounded-md shadow-md bg-slate-100" @submit.prevent="save">
         <div class="flex flex-wrap -mx-3 mb-6">
-          <div class="w-full md:w-2/3 px-3 mb-6 md:mb-0">
+          <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
             <label
               class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
               for="grid-first-name"
