@@ -25,7 +25,7 @@
               for="grid-first-name"
               v-text="`Product Image`"
             />
-            <img :src="image" alt="" srcset="" />
+            <img :src="image" alt="product_image"/>
             <input
               class="appearance-none block w-full bg-gray-200 text-gray-400 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
               id="grid-first-name"
