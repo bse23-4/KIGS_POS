@@ -45,6 +45,8 @@ export default {
       },
       addProduct(){
         this.$router.push("/addProduct");
+      },barcode(){
+        this.$router.push("/barcode");
       },
     },
 }

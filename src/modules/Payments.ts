@@ -3,16 +3,15 @@ import type { PaymentMethod } from "./modules";
   class Airtel implements PaymentMethod {
     constructor(private readonly phone: string, private readonly pin: string) {}
     pay(amount: string): string {
-      return (`Paying ${amount} with ${this.phone}.`);
+      return (`Paying with Airtel ${amount} using ${this.phone}.`);
     }
   }
   class MTN implements PaymentMethod {
     
     constructor(private readonly phone:string, private readonly pin: string) {
     }
-  
     pay(amount: string): string {
-      return (`Paying ${amount} with ${this.phone}.`);
+      return (`Paying with MTN  ${amount} using ${this.phone}.`);
     }
   }
   

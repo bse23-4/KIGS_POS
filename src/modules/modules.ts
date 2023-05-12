@@ -1,3 +1,4 @@
+//observer interface for notifying observers and updating the cart.
 export interface Observer {
   notify: (productId: ProductInterface) => string;
   update: (productId: string) => void;
@@ -14,7 +15,7 @@ export default interface ProductInterface {
   productCategory: string;
   productQuantity: number;
 }
-
+// cart service interface is the subject that notifies observers.
 export interface CartServiceInterface {
   registerObserver: (observer: Observer) => void;
   notifyObservers: () => void;

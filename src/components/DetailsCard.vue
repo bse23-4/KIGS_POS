@@ -71,6 +71,7 @@
     </div>
    </div>
 </template>
+
 <script lang='ts'>
 import { ExpressShippingDecorator, GiftWrapDecorator } from '@/modules/ProductFeature';
 import { mapGetters, mapMutations } from 'vuex'

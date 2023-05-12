@@ -10,6 +10,7 @@
               for="grid-first-name"
               v-text="`Product Name`"
             />
+          
             <input
               class="appearance-none block w-full bg-gray-200 text-gray-400 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
               id="grid-first-name"
@@ -26,6 +27,7 @@
               v-text="`Product Image`"
             />
             <img :src="image" alt="product_image"/>
+           <!-- restrict to uploading images only -->
             <input
               class="appearance-none block w-full bg-gray-200 text-gray-400 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
               id="grid-first-name"
@@ -146,10 +148,12 @@
 </template>
 <script lang="ts" >
 import { mapMutations } from "vuex";
-
 export default {
   name: "AddProduct",
   data() {
+    /**
+     * String pdtName =  ""
+     */
     return {
       pdtName: "",
       pdtPrice: 0,
@@ -158,7 +162,6 @@ export default {
       pdtDesc: "",
       pdtCat: "",
       pdtQty: 0,
-      
     };
   },
   computed:{
@@ -191,6 +194,7 @@ export default {
       }
       reader.readAsDataURL(f);
     },
+    //data about the product from the add product form
     save() {
       let data = {
         productName: this.pdtName,

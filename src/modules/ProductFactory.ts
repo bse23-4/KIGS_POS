@@ -2,7 +2,9 @@ import type ProductInterface from './modules';
 /**
  * KIGGS SUPERMARKET POS SYSTEM
  */
-class Product implements ProductInterface {
+// concrete product
+class ConcreteProduct implements ProductInterface {
+  // implementing all properties of the ProductInterface
   productName!: string;
   productPrice!: number;
   dateOfPurchase: any;
@@ -11,6 +13,7 @@ class Product implements ProductInterface {
   productId!: number;
   productCategory!: string;
   productQuantity!: number;
+// constructor to assign values to the properties
   constructor(params: ProductInterface) {
     this.productName = params.productName;
     this.productPrice = params.productPrice;
@@ -22,23 +25,25 @@ class Product implements ProductInterface {
     this.productQuantity = params.productQuantity;
   }
 }
-class Clothing implements ProductInterface {
-  productName!: string;
-  productPrice!: number;
-  dateOfPurchase: any;
-  productImage: any;
-  productDescription!: string;
-  productId!: number;
-  productCategory!: string;
-  productQuantity!: number;
-}
+// class Clothing implements ProductInterface {
+//   productName!: string;
+//   productPrice!: number;
+//   dateOfPurchase: any;
+//   productImage: any;
+//   productDescription!: string;
+//   productId!: number;
+//   productCategory!: string;
+//   productQuantity!: number;
+// }
+
 class ProductFactory {
+  // factory method to create products
   createProduct(params: ProductInterface): ProductInterface {
     switch (params.productCategory) {
       case 'cloth':
-        return new Clothing();
+        // return new Clothing();
       default:
-        return new Product(params);
+        return new ConcreteProduct(params);
     }
   }
 }

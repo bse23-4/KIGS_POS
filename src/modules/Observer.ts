@@ -5,10 +5,11 @@ import type { Observer , CartServiceInterface } from './modules';
     private observers: Observer[] = [];
     private cart: ProductInterface[] = [];
 
+// method to register observers
     public registerObserver(observer: Observer): void {
       this.observers =  [...this.observers,observer];
     }
-   
+  //  method to notify observers
     notifyObservers():string {
       let msg = '';
       for (let index = 0; index < this.observers.length; index++) {
@@ -16,12 +17,8 @@ import type { Observer , CartServiceInterface } from './modules';
       }
       return msg;
     }
-    addProduct(product: ProductInterface):string {
-      this.cart = [...this.cart, product];
-
-     return this.notifyObservers();
-    }
   }
+  // Define the concrete observer (salesperson) class, which implements the Observer interface.
  export class Salesperson implements Observer {
   private product:ProductInterface;
   constructor(product:ProductInterface){
@@ -41,12 +38,12 @@ export default class BarcodeScanner implements Observer {
     };
   // Update method to handle barcode scan events
   update(barcode: string): void {
-      let p = new ProductCatalog();
+      let p = ProductCatalog.getInstance();
       let product = p.getProducts().find((product) => product.productName === barcode);
     // Look up the product from the barcode
     if (product) {
       // Add the product to the cart
-      this.cart.addProduct(product);
+      // this.cart.addProduct(product);
       // this.cart.addProduct(product);
     } else {
       console.log(`Could not find product for barcode ${barcode}.`);

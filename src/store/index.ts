@@ -1,4 +1,4 @@
-import { CartService, Salesperson } from '@/modules/Obeserver';
+import { CartService, Salesperson } from '@/modules/Observer';
 import ProductCatalog from '@/modules/ProductCatalog'
 import ProductFactory from '@/modules/ProductFactory'
 import type ProductInterface from '@/modules/modules';
@@ -8,8 +8,6 @@ let pdtCat =  ProductCatalog.getInstance();
 Vue.use(Vuex)
 export default new Vuex.Store({
   state:  {
-      db: null,
-      time: null,
       showDetails:false,
       firstTime: localStorage.getItem("first_time") === null,
       activeMenu: 'pos',
@@ -53,13 +51,15 @@ export default new Vuex.Store({
     total:state => state.total,
   },
   mutations: {
+    // client side
     saveProduct(state,payload:ProductInterface){
+      // instantiate a factory class
       let product = new ProductFactory();
+      // we use the factory method to create a product
      let pdt = product.createProduct(payload);
-     //  console.log(payload)
-      pdtCat.addProduct(pdt);
+     // saving product using the singleton pattern
+      pdtCat.saveProduct(pdt);
       state.products = pdtCat.getProducts();
-      [].flatMap()
     },
     addingToCart(state, payload:ProductInterface){
       let old = state.cart.filter(c => c.productName === payload.productName);
@@ -72,11 +72,12 @@ export default new Vuex.Store({
         let sales = new Salesperson(payload);
         // registering sales person to be notified of new products added to cart
         service.registerObserver(sales);
-       state.message = service.addProduct(payload);
+       state.message = service.notifyObservers();
       } else{
         state.message = "Product is already added to cart"
       }
     },
+    // remove product from cart
     setQty(state,payload:number){
       state.qty = payload;
     },

@@ -1,10 +1,13 @@
 import type ProductInterface from "./modules";
+// product catalog is the singleton class
 class ProductCatalog {
+
   private static instance: ProductCatalog;
+  
   products: ProductInterface[];
   reports: ProductInterface[];
   // static products: never[];
-  constructor() {
+  private constructor() {
     //  this.products = [];
     if (localStorage.getItem("products") == undefined || localStorage.getItem("products") == null) {
       localStorage.setItem("products", JSON.stringify([]));
@@ -20,30 +23,27 @@ class ProductCatalog {
       this.reports = JSON.parse(`${localStorage.getItem("capturedReports")}`);
     }
   }
+  //getInstance() gives us the singleton object(product catalog) and ensures it is created once
   public static getInstance(): ProductCatalog {
+    //checking if there's a product so as to save a new product if not already
     if (!ProductCatalog.instance) {
       ProductCatalog.instance = new ProductCatalog();
     }
     return ProductCatalog.instance;
   }
-  // function to play sound when a product is added
-  private static playSound(source: string): void {
-    const sound = new Audio(source);
-    sound.autoplay = true;
-    sound.play();
-    // sound.onended = () => delete(sound);
-  }
-  public addProduct(product: ProductInterface): void {
-    this.products = [...this.products, product];
-    // play sound
-    ProductCatalog.playSound("@/sound/beep-29.mp3");
+  public saveProduct(product: ProductInterface): void {
+    // add product
+    // this.products = [...this.products, product];
+    this.products.push(product);
     // saving products on persistent storage.
+    //stringify converts the object to string
     localStorage.setItem("products", JSON.stringify(this.products));
+    //
     console.log(this.products);
   }
 
   public getProducts(): ProductInterface[] {
-    // retrive saved products from localStorage
+    // retrieve saved products from localStorage
     return this.products;
   }
   // save reports to persistent storage
